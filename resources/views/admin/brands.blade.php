@@ -14,26 +14,33 @@
 
         <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-100 mb-6">
             <div class="flex flex-col md:flex-row gap-4 justify-between">
-                <div class="flex flex-col md:flex-row gap-4 w-full md:w-auto">
+                <form action="{{route('admin.brands')}}" method="GET" class="flex flex-col md:flex-row gap-4 w-full md:w-auto">
                     <div class="relative w-full md:w-64">
                         <span class="absolute inset-y-0 left-0 flex items-center pl-3">
                             <i class="fa-solid fa-search text-gray-400"></i>
                         </span>
-                        <input type="text"
+                        <input type="text" name="search" value="{{request('search')}}"
                             class="w-full pl-10 pr-4 py-2 border rounded-lg text-sm focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary"
                             placeholder="Search brand...">
                     </div>
 
-                    <select
+                    <select name="status" onchange="this.form.submit()" 
                         class="w-full md:w-40 border px-3 py-2 rounded-lg text-sm focus:outline-none focus:border-primary bg-white text-gray-600">
                         <option value="">All Status</option>
-                        <option value="active">Active</option>
-                        <option value="inactive">Inactive</option>
+                        <option value="1" {{ request('status') == '1' ? 'selected' : '' }} >Active</option>
+                        <option value="0" {{ request('status') == '0' ? 'selected' : '' }}>Inactive</option>
                     </select>
-                </div>
+
+                    @if ( request('search') || request()->filled('status') )
+                        <a href="{{route('admin.brands')}}">Clear</a>
+                    @endif
+
+                    <input type="submit" value="Apply" class="hidden">
+                </form>
             </div>
         </div>
 
+        status: {{request('status')}}
 
         <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
             <div class="overflow-x-auto">
@@ -64,7 +71,7 @@
                                 <td class="px-6 py-4">
                                     <span class="font-semibold text-gray-800">{{ $brand->name }}</span>
                                 </td>
-                                <td class="px-6 py-4 text-sm text-gray-600">{{ $brand->name }}</td>
+                                <td class="px-6 py-4 text-sm text-gray-600">{{ $brand->slug }}</td>
                                 <td class="px-6 py-4">
                                     <span class="bg-blue-50 text-blue-700 px-2 py-1 rounded text-xs font-semibold">0
                                         Items</span>
