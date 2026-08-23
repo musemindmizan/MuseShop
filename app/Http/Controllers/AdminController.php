@@ -12,11 +12,6 @@ class AdminController extends Controller
     public function index() {
         return view('admin.index');
     }
-
-    public function products() {
-
-        return view('admin.products');
-    }
     
     public function brands() {
         $query = Brand::query();
@@ -114,9 +109,23 @@ class AdminController extends Controller
     }
 
     public function categories() {
-        $categories = Category::orderBy('id', 'DESC')->paginate(10);
+        $query = Category::query();
 
-        return view('admin.categories', compact('categories'));
+        if( request()->filled('search') ) {
+            $query->where('name', 'LIKE', '%' . request('search') . '%');
+        }
+
+        if( request()->filled('parent-category') ) {
+            $query->whereHas('parent', function ($q) {
+                $q->where('slug', request('parent-category'));
+            });
+        }
+
+        $categories = $query->orderBy('id', 'DESC')->paginate(10)->withQueryString();
+
+        $parentCategories = Category::whereNull('parent_id')->orderBy('name')->get();
+
+        return view('admin.categories', compact('categories', 'parentCategories'));
     }
 
     public function categoryCreate() {
@@ -207,6 +216,11 @@ class AdminController extends Controller
         $category->delete();
 
         return redirect()->route('admin.categories')->with('success', 'Category Deleted Successfully!');
+    }
+
+    public function products() {
+
+        return view('admin.products');
     }
 
 }
