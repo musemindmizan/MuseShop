@@ -94,7 +94,7 @@
                                         </a>
                                         <button
                                             class="w-8 h-8 rounded-full hover:bg-gray-100 text-red-500 transition flex items-center justify-center"
-                                            onclick="deleteCategory(this, 'Samsung', 101)" title="Delete">
+                                            onclick="deleteCategory(this, '{{ $category->name }}', {{ $category->id }})" title="Delete">
                                             <i class="fa-solid fa-trash"></i>
                                         </button>
                                     </div>
@@ -162,21 +162,25 @@
         </div>
     </div>
 
+    <form id="delete-category-form" action="" method="POST" class="hidden">
+        @csrf
+        @method('DELETE')
+    </form>
+
     <script>
         // Modal Elements
         const deleteModal = document.getElementById('deleteModal');
         const confirmBtn = document.getElementById('confirmDeleteBtn');
         const cancelBtn = document.getElementById('cancelDeleteBtn');
         const categoryNameSpan = document.getElementById('delete-category-name');
+        const deleteForm = document.getElementById('delete-category-form');
+        const deleteUrlTemplate = "{{ route('admin.category.delete', ':id') }}";
 
-        // Variables to hold the state of what we are deleting
-        let rowToDelete = null;
+        // Variable to hold the id of what we are deleting
         let categoryIdToDelete = null;
 
         // Function triggered when the trash icon is clicked
         function deleteCategory(buttonElement, categoryName, categoryId) {
-            // Save the row so we can remove it later
-            rowToDelete = buttonElement.closest('tr');
             categoryIdToDelete = categoryId;
 
             // Update the modal text dynamically
@@ -189,7 +193,6 @@
         // Close Modal Function
         function closeModal() {
             deleteModal.classList.add('hidden');
-            rowToDelete = null;
             categoryIdToDelete = null;
         }
 
@@ -206,16 +209,9 @@
 
         // Handle Confirm Delete Button
         confirmBtn.addEventListener('click', function() {
-            if (rowToDelete) {
-
-                // For the UI demo, we will just remove the row from the table smoothly
-                rowToDelete.style.transition = "all 0.3s ease";
-                rowToDelete.style.opacity = "0";
-
-                setTimeout(() => {
-                    rowToDelete.remove();
-                    closeModal(); // Hide modal after deleting
-                }, 300);
+            if (categoryIdToDelete) {
+                deleteForm.action = deleteUrlTemplate.replace(':id', categoryIdToDelete);
+                deleteForm.submit();
             }
         });
     </script>
