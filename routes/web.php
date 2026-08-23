@@ -40,6 +40,8 @@ Route::middleware([AuthAdmin::class])->group(function() {
     Route::get('/admin/categories', [AdminController::class, 'categories'])->name('admin.categories');
     Route::get('/admin/category/create', [AdminController::class, 'categoryCreate'])->name('admin.category.create');
     Route::post('/admin/category/create', [AdminController::class, 'categoryStore'])->name('admin.category.store');
+    Route::get('/admin/category/edit/{id}', [AdminController::class, 'categoryEdit'])->name('admin.category.edit');
+    Route::post('/admin/category/edit/{id}', [AdminController::class, 'categoryUpdate'])->name('admin.category.update');
 
     // Products
     Route::get('/admin/products', [AdminController::class, 'products'])->name('admin.products');

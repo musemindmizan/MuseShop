@@ -153,4 +153,50 @@ class AdminController extends Controller
 
         return redirect()->route('admin.categories')->with('success', 'Category Created Successfully!');
     }
+
+    public function categoryEdit($id) {
+        $category = Category::findOrFail($id);
+
+        $categories = Category::whereNull('parent_id')
+            ->where('id', '!=', $category->id)
+            ->orderBy('name')
+            ->get();
+
+        return view('admin.category-edit', compact('category', 'categories'));
+    }
+
+    public function categoryUpdate( Request $request, $id ) {
+
+        $category = Category::findOrFail($id);
+
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'slug' => 'nullable|string|max:255|unique:categories,slug,' . $category->id,
+            'parent_id' => 'nullable|exists:categories,id|not_in:' . $category->id,
+            'image' => 'nullable|image|mimes:png,jpg,jpeg,webp|max:2048',
+            'status' => 'nullable|boolean',
+        ]);
+
+        $category->name = $request->name;
+        $category->slug = $request->slug ? Str::slug($request->slug) : Str::slug($request->name);
+        $category->parent_id = $request->parent_id ?: null;
+        $category->status = $request->has('status') ? 1 : 0;
+
+        if( $request->hasFile('image') ) {
+            if( $category->image && file_exists(public_path('uploads/categories/' . $category->image)) ) {
+                unlink(public_path('uploads/categories/' . $category->image));
+            }
+
+            $imageName = time() . '_' . uniqid() . '.' . $request->image->extension();
+            $request->image->move(public_path('uploads/categories'), $imageName);
+            $category->image = $imageName;
+        }
+
+        $category->save();
+
+        return redirect()->route('admin.categories')->with('success', 'Category Updated Successfully!');
+    }
+
+
+
 }
