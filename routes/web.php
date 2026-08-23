@@ -27,12 +27,21 @@ Route::middleware('auth')->group(function () {
 
 Route::middleware([AuthAdmin::class])->group(function() {
     Route::get('/admin', [AdminController::class, 'index'])->name('admin.index');
+
+    // Brands
     Route::get('/admin/brands', [AdminController::class, 'brands'])->name('admin.brands');
     Route::get('/admin/brand/create', [AdminController::class, 'brandCreate'])->name('admin.brand.create');
     Route::post('/admin/brand/create', [AdminController::class, 'brandStore'])->name('admin.brand.store');
     Route::get('/admin/brand/edit/{id}', [AdminController::class, 'brandEdit'])->name('admin.brand.edit');
     Route::post('/admin/brand/edit/{id}', [AdminController::class, 'brandUpdate'])->name('admin.brand.update');
     Route::post('/admin/brand/delete/{id}', [AdminController::class, 'brandDelete'])->name('admin.brand.delete');
+
+    // Category
+    Route::get('/admin/categories', [AdminController::class, 'categories'])->name('admin.categories');
+    Route::get('/admin/category/create', [AdminController::class, 'categoryCreate'])->name('admin.category.create');
+    Route::post('/admin/category/create', [AdminController::class, 'categoryStore'])->name('admin.category.store');
+
+    // Products
     Route::get('/admin/products', [AdminController::class, 'products'])->name('admin.products');
 });
 

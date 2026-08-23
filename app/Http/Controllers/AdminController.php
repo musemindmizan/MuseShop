@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Brand;
+use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
@@ -110,5 +111,46 @@ class AdminController extends Controller
         $brand->delete();
 
         return redirect()->route('admin.brands')->with('success', 'Brand Deleted Successfully!');
+    }
+
+    public function categories() {
+        $categories = Category::orderBy('id', 'DESC')->paginate(10);
+
+        return view('admin.categories', compact('categories'));
+    }
+
+    public function categoryCreate() {
+
+        $categories = Category::whereNull('parent_id')->orderBy('name')->get();
+
+        return view('admin.category-create', compact('categories'));
+    }
+
+    public function categoryStore( Request $request ) {
+
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'slug' => 'nullable|string|max:255|unique:categories,slug',
+            'parent_id' => 'nullable|exists:categories,id',
+            'image' => 'nullable|image|mimes:png,jpg,jpeg,webp|max:2048',
+            'status' => 'nullable|boolean',
+        ]);
+
+        $category = new Category();
+
+        $category->name = $request->name;
+        $category->slug = $request->slug ? Str::slug($request->slug) : Str::slug($request->name);
+        $category->parent_id = $request->parent_id ?: null;
+        $category->status = $request->has('status') ? 1 : 0;
+
+        if( $request->hasFile('image') ) {
+            $imageName = time() . '_' . uniqid() . '.' . $request->image->extension();
+            $request->image->move(public_path('uploads/categories'), $imageName);
+            $category->image = $imageName;
+        }
+
+        $category->save();
+
+        return redirect()->route('admin.categories')->with('success', 'Category Created Successfully!');
     }
 }
