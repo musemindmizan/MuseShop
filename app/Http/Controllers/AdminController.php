@@ -2,9 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Brand\StoreBrandRequest;
+use App\Http\Requests\Brand\UpdateBrandRequest;
+use App\Http\Requests\Category\StoreCategoryRequest;
+use App\Http\Requests\Category\UpdateCategoryRequest;
 use App\Models\Brand;
 use App\Models\Category;
-use Illuminate\Http\Request;
+use App\Models\Product;
 use Illuminate\Support\Str;
 
 class AdminController extends Controller
@@ -33,15 +37,7 @@ class AdminController extends Controller
         return view('admin.brand-create');
     }
 
-    public function brandStore( Request $request ) {
-
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'slug' => 'nullable|string|max:255|unique:brands,slug',
-            'image' => 'required|image|mimes:png,jpg,jpeg,webp|max:2048',
-            'status' => 'nullable|boolean',
-        ]);
-
+    public function brandStore( StoreBrandRequest $request ) {
         $brand = new Brand();
 
         $brand->name = $request->name;
@@ -65,16 +61,9 @@ class AdminController extends Controller
         return view('admin.brand-edit', compact('brand'));
     }
 
-    public function brandUpdate( Request $request, $id ) {
+    public function brandUpdate( UpdateBrandRequest $request, $id ) {
 
         $brand = Brand::findOrFail($id);
-
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'slug' => 'nullable|string|max:255|unique:brands,slug,' . $brand->id,
-            'image' => 'nullable|image|mimes:png,jpg,jpeg,webp|max:2048',
-            'status' => 'nullable|boolean',
-        ]);
 
         $brand->name = $request->name;
         $brand->slug = $request->slug ? Str::slug($request->slug) : Str::slug($request->name);
@@ -135,15 +124,7 @@ class AdminController extends Controller
         return view('admin.category-create', compact('categories'));
     }
 
-    public function categoryStore( Request $request ) {
-
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'slug' => 'nullable|string|max:255|unique:categories,slug',
-            'parent_id' => 'nullable|exists:categories,id',
-            'image' => 'nullable|image|mimes:png,jpg,jpeg,webp|max:2048',
-            'status' => 'nullable|boolean',
-        ]);
+    public function categoryStore( StoreCategoryRequest $request ) {
 
         $category = new Category();
 
@@ -174,17 +155,9 @@ class AdminController extends Controller
         return view('admin.category-edit', compact('category', 'categories'));
     }
 
-    public function categoryUpdate( Request $request, $id ) {
+    public function categoryUpdate( UpdateCategoryRequest $request, $id ) {
 
         $category = Category::findOrFail($id);
-
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'slug' => 'nullable|string|max:255|unique:categories,slug,' . $category->id,
-            'parent_id' => 'nullable|exists:categories,id|not_in:' . $category->id,
-            'image' => 'nullable|image|mimes:png,jpg,jpeg,webp|max:2048',
-            'status' => 'nullable|boolean',
-        ]);
 
         $category->name = $request->name;
         $category->slug = $request->slug ? Str::slug($request->slug) : Str::slug($request->name);
@@ -219,8 +192,23 @@ class AdminController extends Controller
     }
 
     public function products() {
+        $products = Product::latest()->paginate(10);
 
-        return view('admin.products');
+        $categories = Category::select('id', 'name')->get();
+
+        $brands = Brand::select('id', 'name')->get();
+
+        return view('admin.products', compact('products', 'categories', 'brands'));
     }
+
+    public function productCreate() {
+        return view('admin.product-create');
+    }
+
+    public function productStore() {
+        
+    }
+
+    
 
 }
