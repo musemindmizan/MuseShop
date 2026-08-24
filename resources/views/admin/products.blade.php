@@ -28,7 +28,7 @@
                         class="w-full md:w-48 border px-3 py-2 rounded-lg text-sm focus:outline-none focus:border-primary bg-white text-gray-600">
                         <option value="">All Categories</option>
                         @foreach ($categories as $category)
-                            <option value="{{$category->id}}">{{ $category->name }}</option>
+                            <option value="{{ $category->id }}">{{ $category->name }}</option>
                         @endforeach
                     </select>
 
@@ -73,20 +73,28 @@
                                 </td>
                                 <td class="px-6 py-4">
                                     <div class="flex items-center gap-3">
-                                        <img src="{{ asset('assets/images/product/product-01.jpg') }}"
-                                            class="w-12 h-12 rounded object-cover border" alt="Prod">
+                                        @if ($product->image)
+                                            <img src="{{ asset('uploads/products/' . $product->image) }}"
+                                                class="w-12 h-12 rounded object-cover border" alt="Prod">
+                                        @endif
                                         <div>
-                                            <p class="font-semibold text-gray-800 text-sm">Elona Bedside Table</p>
-                                            <p class="text-xs text-gray-500">ID: #PROD-001</p>
+                                            <p class="font-semibold text-gray-800 text-sm">{{ $product->name }}</p>
+                                            <p class="text-xs text-gray-500">ID: #{{ $product->id }}</p>
                                         </div>
                                     </div>
                                 </td>
-                                <td class="px-6 py-4 text-sm text-gray-600">Furniture</td>
-                                <td class="px-6 py-4 text-sm font-medium text-gray-800">$140.00</td>
-                                <td class="px-6 py-4 text-sm text-gray-600">45</td>
+                                <td class="px-6 py-4 text-sm text-gray-600">
+                                    {{ $product->category?->name ?? 'Uncategorized' }}</td>
+                                <td class="px-6 py-4 text-sm font-medium text-gray-800">${{ $product->sale_price ? $product->sale_price : $product->price }}</td>
+                                <td class="px-6 py-4 text-sm text-gray-600">{{ $product->stock }}</td>
                                 <td class="px-6 py-4">
-                                    <span
-                                        class="bg-green-100 text-green-700 px-2.5 py-1 rounded-full text-xs font-semibold">Active</span>
+                                    @if ($product->status)
+                                        <span
+                                            class="bg-green-100 text-green-700 px-2.5 py-1 rounded-full text-xs font-semibold">Published</span>
+                                    @else
+                                        <span
+                                            class="bg-red-100 text-red-700 px-2.5 py-1 rounded-full text-xs font-semibold">Draft</span>
+                                    @endif
                                 </td>
                                 <td class="px-6 py-4 text-right">
                                     <div class="flex items-center justify-end gap-2">

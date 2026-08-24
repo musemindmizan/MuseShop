@@ -9,7 +9,8 @@
             </a>
         </div>
 
-        <form action="{{ route('admin.product.create') }}" method="POST" enctype="multipart/form-data">
+        <form action="{{ route('admin.product.store') }}" method="POST" enctype="multipart/form-data">
+            @csrf
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
 
                 <div class="lg:col-span-2 space-y-6">
@@ -21,21 +22,30 @@
                                 <input type="text" id="product-name" name="name" value="{{ old('name') }}" placeholder="e.g. Modern Sofa"
                                     class="w-full border px-4 py-2 rounded-lg focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary text-sm"
                                     required>
+                                @error('name')
+                                    <p class="text-sm text-red-500 mt-1">{{ $message }}</p>
+                                @enderror
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">Slug</label>
-                                <input type="text" id="product-slug" name="slug" placeholder="e.g. modern-sofa"
+                                <input type="text" id="product-slug" name="slug" value="{{ old('slug') }}" placeholder="e.g. modern-sofa"
                                     class="w-full border px-4 py-2 rounded-lg focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary text-sm bg-gray-50">
+                                @error('slug')
+                                    <p class="text-sm text-red-500 mt-1">{{ $message }}</p>
+                                @enderror
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">Short Description</label>
-                                <textarea id="short_description" name="short_description" rows="3" placeholder="Brief summary..."
-                                    class="w-full border px-4 py-2 rounded-lg focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary text-sm"></textarea>
+                                <textarea id="short_description" name="short_description" rows="3" maxlength="255" placeholder="Brief summary..."
+                                    class="w-full border px-4 py-2 rounded-lg focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary text-sm">{{ old('short_description') }}</textarea>
+                                @error('short_description')
+                                    <p class="text-sm text-red-500 mt-1">{{ $message }}</p>
+                                @enderror
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">Description</label>
                                 <textarea id="description" name="description" rows="18" placeholder="Detailed description..."
-                                    class="w-full border px-4 py-2 rounded-lg focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary text-sm"></textarea>
+                                    class="w-full border px-4 py-2 rounded-lg focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary text-sm">{{ old('description') }}</textarea>
                             </div>
                         </div>
                     </div>
@@ -44,32 +54,36 @@
                         <h3 class="font-bold text-gray-800 mb-4 border-b pb-2">Pricing & Inventory</h3>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-1">Regular Price ($)</label>
-                                <input type="number" id="regular_price" name="regular_price" placeholder="0.00"
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Regular Price ($) *</label>
+                                <input type="number" step="0.01" min="0" id="regular_price" name="regular_price" value="{{ old('regular_price') }}" placeholder="0.00" required
                                     class="w-full border px-4 py-2 rounded-lg focus:outline-none focus:border-primary text-sm">
+                                @error('regular_price')
+                                    <p class="text-sm text-red-500 mt-1">{{ $message }}</p>
+                                @enderror
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">Sale Price ($)</label>
-                                <input type="number" id="sale_price" name="sale_price" placeholder="0.00"
+                                <input type="number" step="0.01" min="0" id="sale_price" name="sale_price" value="{{ old('sale_price') }}" placeholder="0.00"
                                     class="w-full border px-4 py-2 rounded-lg focus:outline-none focus:border-primary text-sm">
+                                @error('sale_price')
+                                    <p class="text-sm text-red-500 mt-1">{{ $message }}</p>
+                                @enderror
                             </div>
                             <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-1">SKU</label>
-                                <input type="text" id="SKU" name="SKU" placeholder="Product SKU"
+                                <label class="block text-sm font-medium text-gray-700 mb-1">SKU *</label>
+                                <input type="text" id="SKU" name="SKU" value="{{ old('SKU') }}" placeholder="Product SKU" required
                                     class="w-full border px-4 py-2 rounded-lg focus:outline-none focus:border-primary text-sm">
+                                @error('SKU')
+                                    <p class="text-sm text-red-500 mt-1">{{ $message }}</p>
+                                @enderror
                             </div>
                             <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-1">Stock Status</label>
-                                <select id="stock_status" name="stock_status"
-                                    class="w-full border px-4 py-2 rounded-lg focus:outline-none focus:border-primary text-sm bg-white">
-                                    <option value="instock">In Stock</option>
-                                    <option value="outofstock">Out of Stock</option>
-                                </select>
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-1">Quantity</label>
-                                <input type="number" id="quantity" name="quantity" placeholder="Total items"
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Quantity *</label>
+                                <input type="number" min="0" id="quantity" name="quantity" value="{{ old('quantity') }}" placeholder="Total items" required
                                     class="w-full border px-4 py-2 rounded-lg focus:outline-none focus:border-primary text-sm">
+                                @error('quantity')
+                                    <p class="text-sm text-red-500 mt-1">{{ $message }}</p>
+                                @enderror
                             </div>
                         </div>
                     </div>
@@ -83,12 +97,12 @@
                                 <span class="text-sm text-gray-600">Status:</span>
                                 <select id="status" name="status"
                                     class="border rounded text-sm px-2 py-1 bg-white focus:outline-none">
-                                    <option>Draft</option>
-                                    <option>Published</option>
+                                    <option value="0" {{ old('status') == '0' ? 'selected' : '' }}>Draft</option>
+                                    <option value="1" {{ old('status', '1') == '1' ? 'selected' : '' }}>Published</option>
                                 </select>
                             </div>
                             <div class="flex items-center gap-2 pt-2">
-                                <input type="checkbox" id="featured" name="featured"
+                                <input type="checkbox" id="featured" name="featured" value="1" {{ old('featured') ? 'checked' : '' }}
                                     class="rounded border-gray-300 text-primary focus:ring-primary">
                                 <label for="featured" class="text-sm text-gray-700 cursor-pointer">This is a featured
                                     product</label>
@@ -107,20 +121,26 @@
                                 <select id="category_id" name="category_id"
                                     class="w-full border px-4 py-2 rounded-lg focus:outline-none focus:border-primary text-sm bg-white">
                                     <option value="">Select Category</option>
-                                    <option value="1">Furniture</option>
-                                    <option value="2">Electronics</option>
-                                    <option value="3">Clothing</option>
+                                    @foreach ($categories as $category)
+                                        <option value="{{ $category->id }}" {{ old('category_id') == $category->id ? 'selected' : '' }}>{{ $category->name }}</option>
+                                    @endforeach
                                 </select>
+                                @error('category_id')
+                                    <p class="text-sm text-red-500 mt-1">{{ $message }}</p>
+                                @enderror
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">Brand</label>
                                 <select id="brand_id" name="brand_id"
                                     class="w-full border px-4 py-2 rounded-lg focus:outline-none focus:border-primary text-sm bg-white">
                                     <option value="">Select Brand</option>
-                                    <option value="1">Nike</option>
-                                    <option value="2">Samsung</option>
-                                    <option value="3">Apple</option>
+                                    @foreach ($brands as $brand)
+                                        <option value="{{ $brand->id }}" {{ old('brand_id') == $brand->id ? 'selected' : '' }}>{{ $brand->name }}</option>
+                                    @endforeach
                                 </select>
+                                @error('brand_id')
+                                    <p class="text-sm text-red-500 mt-1">{{ $message }}</p>
+                                @enderror
                             </div>
                         </div>
                     </div>
@@ -168,4 +188,111 @@
         </form>
 
     </main>
+
+    @push('scripts')
+    <script>
+        (function () {
+            const input = document.getElementById('product-image');
+            const uploadLabel = document.getElementById('single-upload-label');
+            const previewContainer = document.getElementById('single-preview-container');
+            const preview = document.getElementById('single-image-preview');
+            const removeBtn = document.getElementById('remove-single-image');
+
+            input.addEventListener('change', function () {
+                const file = input.files && input.files[0];
+                if (!file) return;
+
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    preview.src = e.target.result;
+                    previewContainer.classList.remove('hidden');
+                    uploadLabel.classList.add('hidden');
+                };
+                reader.readAsDataURL(file);
+            });
+
+            removeBtn.addEventListener('click', function () {
+                input.value = '';
+                preview.src = '';
+                previewContainer.classList.add('hidden');
+                uploadLabel.classList.remove('hidden');
+            });
+        })();
+
+        (function () {
+            const input = document.getElementById('product-images');
+            const previewContainer = document.getElementById('gallery-preview-container');
+            let currentFiles = [];
+
+            function render() {
+                previewContainer.innerHTML = '';
+
+                currentFiles.forEach(function (file, index) {
+                    const reader = new FileReader();
+                    reader.onload = function (e) {
+                        const wrapper = document.createElement('div');
+                        wrapper.className = 'relative h-24 bg-gray-50 rounded-lg border border-gray-200 flex items-center justify-center overflow-hidden group shadow-sm';
+
+                        const img = document.createElement('img');
+                        img.src = e.target.result;
+                        img.className = 'max-w-full max-h-full object-contain';
+                        wrapper.appendChild(img);
+
+                        const removeBtn = document.createElement('button');
+                        removeBtn.type = 'button';
+                        removeBtn.className = 'absolute top-1 right-1 bg-red-500 text-white rounded-md w-6 h-6 flex items-center justify-center text-xs shadow-md hover:bg-red-600 transition focus:outline-none';
+                        removeBtn.innerHTML = '<i class="fa-solid fa-xmark"></i>';
+                        removeBtn.addEventListener('click', function () {
+                            currentFiles.splice(index, 1);
+                            syncInput();
+                            render();
+                        });
+                        wrapper.appendChild(removeBtn);
+
+                        previewContainer.appendChild(wrapper);
+                    };
+                    reader.readAsDataURL(file);
+                });
+            }
+
+            function syncInput() {
+                const dataTransfer = new DataTransfer();
+                currentFiles.forEach(function (file) {
+                    dataTransfer.items.add(file);
+                });
+                input.files = dataTransfer.files;
+            }
+
+            input.addEventListener('change', function () {
+                currentFiles = Array.from(input.files);
+                render();
+            });
+        })();
+
+        (function () {
+            const nameInput = document.getElementById('product-name');
+            const slugInput = document.getElementById('product-slug');
+            let slugEditedManually = slugInput.value.length > 0;
+
+            function slugify(text) {
+                return text
+                    .toString()
+                    .trim()
+                    .toLowerCase()
+                    .replace(/[^a-z0-9]+/g, '-')
+                    .replace(/^-+|-+$/g, '');
+            }
+
+            nameInput.addEventListener('input', function () {
+                if (!slugEditedManually) {
+                    slugInput.value = slugify(nameInput.value);
+                }
+            });
+
+            slugInput.addEventListener('input', function () {
+                slugEditedManually = slugInput.value.length > 0;
+            });
+        })();
+    </script>
+    @endpush
 </x-admin-layout>

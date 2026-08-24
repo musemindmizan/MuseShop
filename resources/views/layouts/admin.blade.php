@@ -143,7 +143,7 @@
                     </div>
                 </div>
             </header>
-            <main>
+            <main class="flex-1 flex flex-col overflow-hidden">
                 {{ $slot }}
             </main>
 
