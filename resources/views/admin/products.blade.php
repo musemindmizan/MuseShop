@@ -53,13 +53,21 @@
             </div>
         </div>
 
+        <div id="bulk-actions-bar" class="hidden bg-blue-50 border border-blue-200 rounded-xl p-3 mb-4 flex items-center justify-between">
+            <span class="text-sm text-blue-800"><span id="bulk-selected-count">0</span> product(s) selected</span>
+            <button type="button" id="bulk-delete-btn"
+                class="bg-red-600 hover:bg-red-500 text-white px-4 py-1.5 rounded-lg text-sm font-medium transition flex items-center gap-2">
+                <i class="fa-solid fa-trash"></i> Delete Selected
+            </button>
+        </div>
+
         <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
             <div class="overflow-x-auto">
                 <table class="w-full text-left whitespace-nowrap">
                     <thead class="bg-gray-50 text-gray-500 text-xs uppercase font-semibold">
                         <tr>
                             <th class="px-6 py-4">
-                                <input type="checkbox" class="rounded border-gray-300 text-primary focus:ring-primary">
+                                <input type="checkbox" id="select-all-products" class="rounded border-gray-300 text-primary focus:ring-primary">
                             </th>
                             <th class="px-6 py-4">Product Name</th>
                             <th class="px-6 py-4">Category</th>
@@ -73,8 +81,7 @@
                         @forelse ($products as $product)
                             <tr class="hover:bg-gray-50 transition">
                                 <td class="px-6 py-4">
-                                    <input type="checkbox"
-                                        class="rounded border-gray-300 text-primary focus:ring-primary">
+                                    <input type="checkbox" class="product-checkbox rounded border-gray-300 text-primary focus:ring-primary" value="{{ $product->id }}">
                                 </td>
                                 <td class="px-6 py-4">
                                     <div class="flex items-center gap-3">
@@ -183,6 +190,11 @@
         @method('DELETE')
     </form>
 
+    <form id="bulk-delete-form" action="{{ route('admin.products.bulk-delete') }}" method="POST" class="hidden">
+        @csrf
+        @method('DELETE')
+    </form>
+
     <script>
         const deleteModal = document.getElementById('deleteModal');
         const confirmBtn = document.getElementById('confirmDeleteBtn');
@@ -220,5 +232,69 @@
                 deleteForm.submit();
             }
         });
+
+        // Bulk select + delete
+        const selectAllCheckbox = document.getElementById('select-all-products');
+        const productCheckboxes = document.querySelectorAll('.product-checkbox');
+        const bulkActionsBar = document.getElementById('bulk-actions-bar');
+        const bulkSelectedCount = document.getElementById('bulk-selected-count');
+        const bulkDeleteBtn = document.getElementById('bulk-delete-btn');
+        const bulkDeleteForm = document.getElementById('bulk-delete-form');
+
+        function updateBulkActionsBar() {
+            const checked = document.querySelectorAll('.product-checkbox:checked');
+
+            if (checked.length > 0) {
+                bulkActionsBar.classList.remove('hidden');
+                bulkSelectedCount.textContent = checked.length;
+            } else {
+                bulkActionsBar.classList.add('hidden');
+            }
+
+            if (selectAllCheckbox) {
+                selectAllCheckbox.checked = productCheckboxes.length > 0 && checked.length === productCheckboxes.length;
+            }
+        }
+
+        if (selectAllCheckbox) {
+            selectAllCheckbox.addEventListener('change', function () {
+                productCheckboxes.forEach(function (checkbox) {
+                    checkbox.checked = selectAllCheckbox.checked;
+                });
+                updateBulkActionsBar();
+            });
+        }
+
+        productCheckboxes.forEach(function (checkbox) {
+            checkbox.addEventListener('change', updateBulkActionsBar);
+        });
+
+        if (bulkDeleteBtn) {
+            bulkDeleteBtn.addEventListener('click', function () {
+                const selectedIds = Array.from(document.querySelectorAll('.product-checkbox:checked')).map(function (checkbox) {
+                    return checkbox.value;
+                });
+
+                if (selectedIds.length === 0) return;
+
+                if (!confirm('Are you sure you want to delete ' + selectedIds.length + ' selected product(s)? This cannot be undone.')) {
+                    return;
+                }
+
+                bulkDeleteForm.querySelectorAll('input[name="ids[]"]').forEach(function (input) {
+                    input.remove();
+                });
+
+                selectedIds.forEach(function (id) {
+                    const input = document.createElement('input');
+                    input.type = 'hidden';
+                    input.name = 'ids[]';
+                    input.value = id;
+                    bulkDeleteForm.appendChild(input);
+                });
+
+                bulkDeleteForm.submit();
+            });
+        }
     </script>
 </x-admin-layout>

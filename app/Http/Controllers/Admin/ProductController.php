@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Contracts\ImageUploaderInterface;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Product\BulkDeleteProductsRequest;
 use App\Http\Requests\Product\StoreProductRequest;
 use App\Http\Requests\Product\UpdateProductRequest;
 use App\Models\Brand;
@@ -155,5 +156,22 @@ class ProductController extends Controller
         $product->delete();
 
         return redirect()->route('admin.products')->with('success', 'Product Deleted Successfully!');
+    }
+
+    public function bulkDestroy( BulkDeleteProductsRequest $request ) {
+
+        $products = Product::whereIn('id', $request->ids)->get();
+
+        foreach( $products as $product ) {
+            $this->imageUploader->delete($product->image, 'uploads/products');
+
+            foreach( json_decode($product->gallery ?? '[]', true) as $galleryImage ) {
+                $this->imageUploader->delete($galleryImage, 'uploads/products');
+            }
+        }
+
+        $deletedCount = Product::whereIn('id', $request->ids)->delete();
+
+        return redirect()->route('admin.products')->with('success', $deletedCount . ' Product(s) Deleted Successfully!');
     }
 }

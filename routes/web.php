@@ -54,6 +54,7 @@ Route::middleware([AuthAdmin::class])->group(function() {
     Route::get('/admin/product/edit/{id}', [ProductController::class, 'edit'])->name('admin.product.edit');
     Route::post('/admin/product/edit/{id}', [ProductController::class, 'update'])->name('admin.product.update');
     Route::delete('/admin/product/delete/{id}', [ProductController::class, 'destroy'])->name('admin.product.delete');
+    Route::delete('/admin/products/bulk-delete', [ProductController::class, 'bulkDestroy'])->name('admin.products.bulk-delete');
 });
 
 require __DIR__.'/auth.php';
