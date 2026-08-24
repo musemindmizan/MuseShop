@@ -21,7 +21,7 @@ class ProductController extends Controller
         $this->imageUploader = $imageUploader;
     }
 
-    public function index() {
+    protected function filteredProductsQuery() {
         $query = Product::query();
 
         if( request()->filled('search') ) {
@@ -36,13 +36,53 @@ class ProductController extends Controller
             $query->where('status', request('status'));
         }
 
-        $products = $query->latest()->paginate(10)->withQueryString();
+        return $query;
+    }
+
+    public function index() {
+        $products = $this->filteredProductsQuery()->latest()->paginate(10)->withQueryString();
 
         $categories = Category::select('id', 'name')->get();
 
         $brands = Brand::select('id', 'name')->get();
 
         return view('admin.products', compact('products', 'categories', 'brands'));
+    }
+
+    public function export() {
+        $products = $this->filteredProductsQuery()->latest()->with(['category', 'brand'])->get();
+
+        $filename = 'products-' . now()->format('Y-m-d-His') . '.csv';
+
+        $columns = ['ID', 'Name', 'SKU', 'Category', 'Brand', 'Price', 'Sale Price', 'Stock', 'Status', 'Featured'];
+
+        $callback = function () use ($products, $columns) {
+            $handle = fopen('php://output', 'w');
+
+            fputcsv($handle, $columns, escape: '\\');
+
+            foreach( $products as $product ) {
+                fputcsv($handle, [
+                    $product->id,
+                    $product->name,
+                    $product->SKU,
+                    $product->category?->name,
+                    $product->brand?->name,
+                    $product->price,
+                    $product->sale_price,
+                    $product->stock,
+                    $product->status ? 'Published' : 'Draft',
+                    $product->featured ? 'Yes' : 'No',
+                ], escape: '\\');
+            }
+
+            fclose($handle);
+        };
+
+        return response()->stream($callback, 200, [
+            'Content-Type' => 'text/csv',
+            'Content-Disposition' => 'attachment; filename="' . $filename . '"',
+        ]);
     }
 
     public function create() {
