@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\Admin\BrandController;
+use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProfileController;
@@ -29,25 +32,25 @@ Route::middleware([AuthAdmin::class])->group(function() {
     Route::get('/admin', [AdminController::class, 'index'])->name('admin.index');
 
     // Brands
-    Route::get('/admin/brands', [AdminController::class, 'brands'])->name('admin.brands');
-    Route::get('/admin/brand/create', [AdminController::class, 'brandCreate'])->name('admin.brand.create');
-    Route::post('/admin/brand/create', [AdminController::class, 'brandStore'])->name('admin.brand.store');
-    Route::get('/admin/brand/edit/{id}', [AdminController::class, 'brandEdit'])->name('admin.brand.edit');
-    Route::post('/admin/brand/edit/{id}', [AdminController::class, 'brandUpdate'])->name('admin.brand.update');
-    Route::post('/admin/brand/delete/{id}', [AdminController::class, 'brandDelete'])->name('admin.brand.delete');
+    Route::get('/admin/brands', [BrandController::class, 'index'])->name('admin.brands');
+    Route::get('/admin/brand/create', [BrandController::class, 'create'])->name('admin.brand.create');
+    Route::post('/admin/brand/create', [BrandController::class, 'store'])->name('admin.brand.store');
+    Route::get('/admin/brand/edit/{id}', [BrandController::class, 'edit'])->name('admin.brand.edit');
+    Route::post('/admin/brand/edit/{id}', [BrandController::class, 'update'])->name('admin.brand.update');
+    Route::post('/admin/brand/delete/{id}', [BrandController::class, 'destroy'])->name('admin.brand.delete');
 
     // Category
-    Route::get('/admin/categories', [AdminController::class, 'categories'])->name('admin.categories');
-    Route::get('/admin/category/create', [AdminController::class, 'categoryCreate'])->name('admin.category.create');
-    Route::post('/admin/category/create', [AdminController::class, 'categoryStore'])->name('admin.category.store');
-    Route::get('/admin/category/edit/{id}', [AdminController::class, 'categoryEdit'])->name('admin.category.edit');
-    Route::post('/admin/category/edit/{id}', [AdminController::class, 'categoryUpdate'])->name('admin.category.update');
-    Route::delete('/admin/category/delete/{id}', [AdminController::class, 'categoryDelete'])->name('admin.category.delete');
+    Route::get('/admin/categories', [CategoryController::class, 'index'])->name('admin.categories');
+    Route::get('/admin/category/create', [CategoryController::class, 'create'])->name('admin.category.create');
+    Route::post('/admin/category/create', [CategoryController::class, 'store'])->name('admin.category.store');
+    Route::get('/admin/category/edit/{id}', [CategoryController::class, 'edit'])->name('admin.category.edit');
+    Route::post('/admin/category/edit/{id}', [CategoryController::class, 'update'])->name('admin.category.update');
+    Route::delete('/admin/category/delete/{id}', [CategoryController::class, 'destroy'])->name('admin.category.delete');
 
     // Products
-    Route::get('/admin/products', [AdminController::class, 'products'])->name('admin.products');
-    Route::get('/admin/product/create', [AdminController::class, 'productCreate'])->name('admin.product.create');
-    Route::post('/admin/product/create', [AdminController::class, 'productStore'])->name('admin.product.store');
+    Route::get('/admin/products', [ProductController::class, 'index'])->name('admin.products');
+    Route::get('/admin/product/create', [ProductController::class, 'create'])->name('admin.product.create');
+    Route::post('/admin/product/create', [ProductController::class, 'store'])->name('admin.product.store');
 });
 
 require __DIR__.'/auth.php';
