@@ -42,6 +42,31 @@
 </head>
 
 <body class="bg-gray-100 font-sans antialiased">
+
+    @if (session('success'))
+        <div id="flash-toast-success"
+            class="fixed top-4 right-4 z-[100] bg-green-50 border border-green-200 text-green-800 px-5 py-3 rounded-lg shadow-lg flex items-center gap-3 transition-opacity duration-500">
+            <i class="fa-solid fa-circle-check text-green-500"></i>
+            <span class="text-sm font-medium">{{ session('success') }}</span>
+            <button type="button" onclick="document.getElementById('flash-toast-success').remove()"
+                class="text-green-500 hover:text-green-700 ml-2">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+    @endif
+
+    @if (session('error'))
+        <div id="flash-toast-error"
+            class="fixed top-4 right-4 z-[100] bg-red-50 border border-red-200 text-red-800 px-5 py-3 rounded-lg shadow-lg flex items-center gap-3 transition-opacity duration-500">
+            <i class="fa-solid fa-circle-exclamation text-red-500"></i>
+            <span class="text-sm font-medium">{{ session('error') }}</span>
+            <button type="button" onclick="document.getElementById('flash-toast-error').remove()"
+                class="text-red-500 hover:text-red-700 ml-2">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+    @endif
+
     <div class="flex h-screen overflow-hidden">
         <aside id="sidebar"
             class="fixed inset-y-0 left-0 z-50 w-64 bg-sky-800 text-gray-100 transition-transform transform -translate-x-full md:translate-x-0 md:static md:inset-0 flex flex-col">
@@ -169,6 +194,17 @@
 
         mobileMenuBtn.addEventListener('click', toggleSidebar);
         overlay.addEventListener('click', toggleSidebar);
+
+        // Auto-dismiss flash toast messages
+        setTimeout(function () {
+            ['flash-toast-success', 'flash-toast-error'].forEach(function (id) {
+                const toast = document.getElementById(id);
+                if (toast) {
+                    toast.style.opacity = '0';
+                    setTimeout(function () { toast.remove(); }, 500);
+                }
+            });
+        }, 4000);
     </script>
 
     @stack('scripts')
