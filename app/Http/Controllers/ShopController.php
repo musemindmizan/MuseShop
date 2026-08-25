@@ -10,10 +10,11 @@ use App\Models\Brand;
 class ShopController extends Controller
 {
     public function index() {
-        $products = Product::latest()->paginate(1);
-        $brands = Brand::select('id', 'name')->get();
-        $categories = Category::select('id', 'name')->get();
+        $products = Product::latest()->paginate(12);
 
+        $brands = Brand::select('id', 'name')->get();
+
+        $categories = Category::select('id', 'name')->get();
 
         return view('shop.index', compact('products', 'brands', 'categories'));
     }

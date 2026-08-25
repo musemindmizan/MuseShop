@@ -144,7 +144,7 @@
                 <div
                     class="flex flex-col sm:flex-row justify-between items-center bg-white border p-4 rounded mb-8 shadow-sm">
                     <p class="text-sm mb-4 sm:mb-0">
-                        Showing <span class="font-bold text-primary">{{$products->count()}}</span> of <span class="font-bold">{{$products->total()}}</span>
+                        Showing <span class="font-bold text-primary">{{$products->firstItem() ?? 0}} - {{$products->lastItem() ?? 0}}</span> of <span class="font-bold">{{$products->total()}}</span>
                         Results
                     </p>
 
@@ -254,24 +254,7 @@
                 </div>
 
                 <div class="mt-12 flex justify-center">
-
-                    <ul class="flex space-x-2">
-                        <li><a href="#"
-                                class="w-10 h-10 flex items-center justify-center border rounded hover:bg-primary hover:text-white transition"><i
-                                    class="fa fa-angle-left"></i></a></li>
-                        <li><a href="#"
-                                class="w-10 h-10 flex items-center justify-center border rounded hover:bg-primary hover:text-white transition">1</a>
-                        </li>
-                        <li><a href="#"
-                                class="w-10 h-10 flex items-center justify-center border rounded bg-primary text-white shadow">2</a>
-                        </li>
-                        <li><a href="#"
-                                class="w-10 h-10 flex items-center justify-center border rounded hover:bg-primary hover:text-white transition">3</a>
-                        </li>
-                        <li><a href="#"
-                                class="w-10 h-10 flex items-center justify-center border rounded hover:bg-primary hover:text-white transition"><i
-                                    class="fa fa-angle-right"></i></a></li>
-                    </ul>
+                    {{ $products->onEachSide(1)->links('vendor.pagination.shop') }}
                 </div>
 
             </div>
