@@ -20,6 +20,8 @@ Route::get('/welcome', function () {
 
 Route::get('/', [HomeController::class, 'index'])->name('home.index');
 Route::get('/shop', [ShopController::class, 'index'])->name('shop.index');
+Route::get('/product/{product:slug}', [ShopController::class, 'show'])->name('product.show');
+
 
 Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
 Route::post('/cart/add/{productId}', [CartController::class, 'store'])->name('cart.add');

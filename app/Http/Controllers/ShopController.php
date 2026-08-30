@@ -47,4 +47,17 @@ class ShopController extends Controller
 
         return view('shop.index', compact('products', 'brands', 'categories'));
     }
+
+    public function show(Product $product) {
+        abort_unless($product->status, 404);
+
+        $relatedProducts = Product::where('status', 1)
+            ->where('id', '!=', $product->id)
+            ->when($product->category_id, fn($query) => $query->where('category_id', $product->category_id))
+            ->latest()
+            ->limit(4)
+            ->get();
+
+        return view('shop.details', compact('product', 'relatedProducts'));
+    }
 }

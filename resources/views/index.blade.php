@@ -45,111 +45,20 @@
 
             <div class="swiper-container category-slider overflow-hidden">
                 <div class="swiper-wrapper pb-10">
-
-                    <div class="swiper-slide text-center group">
-                        <a href="#"
-                            class="block bg-white rounded-2xl p-6 transition-all duration-300 border border-transparent hover:border-gray-100 hover:shadow-2xl hover:-translate-y-2">
-                            <img src="uploads/categories/1.jpg"
-                                class="mx-auto w-24 h-24 object-contain opacity-80 group-hover:opacity-100 transition-opacity duration-300"
-                                alt="Living Room">
-                        </a>
-                        <h4
-                            class="mt-5 font-semibold text-gray-600 group-hover:text-primary transition-colors uppercase text-xs tracking-widest">
-                            Living Room
-                        </h4>
-                    </div>
-
-                    <div class="swiper-slide text-center group">
-                        <a href="#"
-                            class="block bg-white rounded-2xl p-6 transition-all duration-300 border border-transparent hover:border-gray-100 hover:shadow-2xl hover:-translate-y-2">
-                            <img src="uploads/categories/2.jpg"
-                                class="mx-auto w-24 h-24 object-contain opacity-80 group-hover:opacity-100 transition-opacity duration-300"
-                                alt="Bedroom">
-                        </a>
-                        <h4
-                            class="mt-5 font-semibold text-gray-600 group-hover:text-primary transition-colors uppercase text-xs tracking-widest">
-                            Bedroom
-                        </h4>
-                    </div>
-
-                    <div class="swiper-slide text-center group">
-                        <a href="#"
-                            class="block bg-white rounded-2xl p-6 transition-all duration-300 border border-transparent hover:border-gray-100 hover:shadow-2xl hover:-translate-y-2">
-                            <img src="uploads/categories/3.jpg"
-                                class="mx-auto w-24 h-24 object-contain opacity-80 group-hover:opacity-100 transition-opacity duration-300"
-                                alt="Dining">
-                        </a>
-                        <h4
-                            class="mt-5 font-semibold text-gray-600 group-hover:text-primary transition-colors uppercase text-xs tracking-widest">
-                            Dining Room
-                        </h4>
-                    </div>
-
-                    <div class="swiper-slide text-center group">
-                        <a href="#"
-                            class="block bg-white rounded-2xl p-6 transition-all duration-300 border border-transparent hover:border-gray-100 hover:shadow-2xl hover:-translate-y-2">
-                            <img src="uploads/categories/4.jpg"
-                                class="mx-auto w-24 h-24 object-contain opacity-80 group-hover:opacity-100 transition-opacity duration-300"
-                                alt="Office">
-                        </a>
-                        <h4
-                            class="mt-5 font-semibold text-gray-600 group-hover:text-primary transition-colors uppercase text-xs tracking-widest">
-                            Office
-                        </h4>
-                    </div>
-
-                    <div class="swiper-slide text-center group">
-                        <a href="#"
-                            class="block bg-white rounded-2xl p-6 transition-all duration-300 border border-transparent hover:border-gray-100 hover:shadow-2xl hover:-translate-y-2">
-                            <img src="uploads/categories/5.jpg"
-                                class="mx-auto w-24 h-24 object-contain opacity-80 group-hover:opacity-100 transition-opacity duration-300"
-                                alt="Storage">
-                        </a>
-                        <h4
-                            class="mt-5 font-semibold text-gray-600 group-hover:text-primary transition-colors uppercase text-xs tracking-widest">
-                            Storage
-                        </h4>
-                    </div>
-
-                    <div class="swiper-slide text-center group">
-                        <a href="#"
-                            class="block bg-white rounded-2xl p-6 transition-all duration-300 border border-transparent hover:border-gray-100 hover:shadow-2xl hover:-translate-y-2">
-                            <img src="uploads/categories/6.jpg"
-                                class="mx-auto w-24 h-24 object-contain opacity-80 group-hover:opacity-100 transition-opacity duration-300"
-                                alt="Outdoor">
-                        </a>
-                        <h4
-                            class="mt-5 font-semibold text-gray-600 group-hover:text-primary transition-colors uppercase text-xs tracking-widest">
-                            Outdoor
-                        </h4>
-                    </div>
-
-                    <div class="swiper-slide text-center group">
-                        <a href="#"
-                            class="block bg-white rounded-2xl p-6 transition-all duration-300 border border-transparent hover:border-gray-100 hover:shadow-2xl hover:-translate-y-2">
-                            <img src="uploads/categories/9.jpg"
-                                class="mx-auto w-24 h-24 object-contain opacity-80 group-hover:opacity-100 transition-opacity duration-300"
-                                alt="Lighting">
-                        </a>
-                        <h4
-                            class="mt-5 font-semibold text-gray-600 group-hover:text-primary transition-colors uppercase text-xs tracking-widest">
-                            Kitchen & Bar
-                        </h4>
-                    </div>
-
-                    <div class="swiper-slide text-center group">
-                        <a href="#"
-                            class="block bg-white rounded-2xl p-6 transition-all duration-300 border border-transparent hover:border-gray-100 hover:shadow-2xl hover:-translate-y-2">
-                            <img src="uploads/categories/10.jpg"
-                                class="mx-auto w-24 h-24 object-contain opacity-80 group-hover:opacity-100 transition-opacity duration-300"
-                                alt="Decor">
-                        </a>
-                        <h4
-                            class="mt-5 font-semibold text-gray-600 group-hover:text-primary transition-colors uppercase text-xs tracking-widest">
-                            Kids' Room
-                        </h4>
-                    </div>
-
+                    @foreach ($categories as $category)
+                        <div class="swiper-slide text-center group">
+                            <a href="#"
+                                class="block bg-white rounded-2xl p-6 transition-all duration-300 border border-transparent hover:border-gray-100 hover:shadow-2xl hover:-translate-y-2">
+                                <img src="{{ asset($category->image ? 'uploads/categories/' . $category->image : 'assets/images/category.png') }}"
+                                    class="mx-auto w-24 h-24 object-contain opacity-80 group-hover:opacity-100 transition-opacity duration-300"
+                                    alt="{{ $category->name }}">
+                            </a>
+                            <h4
+                                class="mt-5 font-semibold text-gray-600 group-hover:text-primary transition-colors uppercase text-xs tracking-widest">
+                                {{ $category->name }}
+                            </h4>
+                        </div>
+                    @endforeach
                 </div>
                 <div class="swiper-pagination"></div>
             </div>
@@ -190,65 +99,19 @@
             </h2>
 
             <div class="grid grid-cols-2 md:grid-cols-5 gap-8 items-center">
-
-                <a href="/brands/the-oak-studio" class="flex flex-col items-center group">
-                    <div
-                        class="w-32 h-32 flex items-center justify-center p-4 rounded-xl grayscale group-hover:grayscale-0 group-hover:shadow-xl group-hover:bg-white transition-all duration-300 border border-transparent group-hover:border-gray-100">
-                        <img src="uploads/brands/1.jpg" alt="The Oak Studio"
-                            class="max-h-full max-w-full object-contain">
-                    </div>
-                    <p
-                        class="mt-4 text-sm font-semibold text-gray-500 group-hover:text-primary transition-colors uppercase tracking-wider text-center">
-                        The Oak Studio
-                    </p>
-                </a>
-
-                <a href="/brands/luxe-edge" class="flex flex-col items-center group">
-                    <div
-                        class="w-32 h-32 flex items-center justify-center p-4 rounded-xl grayscale group-hover:grayscale-0 group-hover:shadow-xl group-hover:bg-white transition-all duration-300 border border-transparent group-hover:border-gray-100">
-                        <img src="uploads/brands/2.jpg" alt="Luxe Edge" class="max-h-full max-w-full object-contain">
-                    </div>
-                    <p
-                        class="mt-4 text-sm font-semibold text-gray-500 group-hover:text-primary transition-colors uppercase tracking-wider text-center">
-                        Luxe Edge
-                    </p>
-                </a>
-
-                <a href="/brands/urban-nest" class="flex flex-col items-center group">
-                    <div
-                        class="w-32 h-32 flex items-center justify-center p-4 rounded-xl grayscale group-hover:grayscale-0 group-hover:shadow-xl group-hover:bg-white transition-all duration-300 border border-transparent group-hover:border-gray-100">
-                        <img src="uploads/brands/3.jpg" alt="Urban Nest"
-                            class="max-h-full max-w-full object-contain">
-                    </div>
-                    <p
-                        class="mt-4 text-sm font-semibold text-gray-500 group-hover:text-primary transition-colors uppercase tracking-wider text-center">
-                        Urban Nest
-                    </p>
-                </a>
-
-                <a href="/brands/heritage-wood" class="flex flex-col items-center group">
-                    <div
-                        class="w-32 h-32 flex items-center justify-center p-4 rounded-xl grayscale group-hover:grayscale-0 group-hover:shadow-xl group-hover:bg-white transition-all duration-300 border border-transparent group-hover:border-gray-100">
-                        <img src="uploads/brands/4.jpg" alt="Heritage Wood"
-                            class="max-h-full max-w-full object-contain">
-                    </div>
-                    <p
-                        class="mt-4 text-sm font-semibold text-gray-500 group-hover:text-primary transition-colors uppercase tracking-wider text-center">
-                        Heritage Wood
-                    </p>
-                </a>
-
-                <a href="/brands/pure-pine" class="flex flex-col items-center group">
-                    <div
-                        class="w-32 h-32 flex items-center justify-center p-4 rounded-xl grayscale group-hover:grayscale-0 group-hover:shadow-xl group-hover:bg-white transition-all duration-300 border border-transparent group-hover:border-gray-100">
-                        <img src="uploads/brands/5.jpg" alt="Pure Pine" class="max-h-full max-w-full object-contain">
-                    </div>
-                    <p
-                        class="mt-4 text-sm font-semibold text-gray-500 group-hover:text-primary transition-colors uppercase tracking-wider text-center">
-                        Pure Pine
-                    </p>
-                </a>
-
+                @foreach ($brands as $brand)
+                    <a href="/brands/the-oak-studio" class="flex flex-col items-center group">
+                        <div
+                            class="w-32 h-32 flex items-center justify-center p-4 rounded-xl grayscale group-hover:grayscale-0 group-hover:shadow-xl group-hover:bg-white transition-all duration-300 border border-transparent group-hover:border-gray-100">
+                            <img src="{{ asset($brand->logo ? 'uploads/brands/' . $brand->logo : 'assets/images/brand.png') }}"
+                                alt="{{ $brand->name }}" class="max-h-full max-w-full object-contain">
+                        </div>
+                        <p
+                            class="mt-4 text-sm font-semibold text-gray-500 group-hover:text-primary transition-colors uppercase tracking-wider text-center">
+                            {{ $brand->name }}
+                        </p>
+                    </a>
+                @endforeach
             </div>
         </div>
     </section>
@@ -258,119 +121,40 @@
             <h2 class="text-3xl font-bold text-center mb-10">New Products</h2>
 
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-                <div class="group relative">
-                    <div class="relative overflow-hidden bg-gray-100 rounded-lg">
-                        <a href="details.php">
-                            <img src="{{ asset('assets/images/product/product-01.jpg') }} " alt="Product"
-                                class="w-full h-[300px] object-cover transition duration-500 group-hover:scale-105" />
-                        </a>
-                        <div
-                            class="absolute top-4 right-4 flex flex-col space-y-2 opacity-0 group-hover:opacity-100 transition duration-300 transform translate-x-4 group-hover:translate-x-0">
-                            <button
-                                class="w-10 h-10 bg-white rounded-full shadow hover:bg-primary hover:text-white flex items-center justify-center transition"><i
-                                    class="fas fa-search"></i></button>
-                            <button
-                                class="w-10 h-10 bg-white rounded-full shadow hover:bg-primary hover:text-white flex items-center justify-center transition"><i
-                                    class="fas fa-shopping-bag"></i></button>
-                            <button
-                                class="w-10 h-10 bg-white rounded-full shadow hover:bg-primary hover:text-white flex items-center justify-center transition"><i
-                                    class="fas fa-heart"></i></button>
+                @foreach ($newProducts as $product)
+                    <div class="group relative">
+                        <div class="relative overflow-hidden bg-gray-100 rounded-lg">
+                            <a href="{{ route('product.show', $product->slug) }}">
+                                @if ($product->image)
+                                    <img src="{{ asset('uploads/products/' . $product->image) }}" alt="{{ $product->name }}"
+                                        class="w-full h-[300px] object-cover transition duration-500 group-hover:scale-105" />
+                                @else
+                                    <img src="{{ asset('assets/images/product/product-01.jpg') }}" alt="{{ $product->name }}"
+                                        class="w-full h-[300px] object-cover transition duration-500 group-hover:scale-105" />
+                                @endif
+                            </a>
+                            <div
+                                class="absolute top-4 right-4 flex flex-col space-y-2 opacity-0 group-hover:opacity-100 transition duration-300 transform translate-x-4 group-hover:translate-x-0">
+                                <a href="{{ route('product.show', $product->slug) }}"
+                                    class="w-10 h-10 bg-white rounded-full shadow hover:bg-primary hover:text-white flex items-center justify-center transition"><i
+                                        class="fas fa-search"></i></a>
+                                <form action="{{ route('cart.add', $product->id) }}" method="POST">
+                                    @csrf
+                                    <button type="submit" {{ $product->stock <= 0 ? 'disabled' : '' }}
+                                        class="w-10 h-10 bg-white rounded-full shadow hover:bg-primary hover:text-white flex items-center justify-center transition disabled:opacity-50 disabled:cursor-not-allowed"><i
+                                            class="fas fa-shopping-bag"></i></button>
+                                </form>
+                                <button
+                                    class="w-10 h-10 bg-white rounded-full shadow hover:bg-primary hover:text-white flex items-center justify-center transition"><i
+                                        class="fas fa-heart"></i></button>
+                            </div>
+                        </div>
+                        <div class="mt-4 text-center">
+                            <h4 class="text-lg font-medium hover:text-primary transition"><a href="{{ route('product.show', $product->slug) }}">{{ $product->name }}</a></h4>
+                            <p class="text-primary font-bold mt-1">${{ number_format($product->sale_price ?: $product->price, 2) }}</p>
                         </div>
                     </div>
-                    <div class="mt-4 text-center">
-                        <h4 class="text-lg font-medium hover:text-primary transition"><a href="details.php">Elona
-                                bedside grey table</a></h4>
-                        <p class="text-primary font-bold mt-1">$40.00</p>
-                    </div>
-                </div>
-
-                <div class="group relative">
-                    <div class="relative overflow-hidden bg-gray-100 rounded-lg">
-                        <a href="details.php">
-                            <img src="{{ asset('assets/images/product/product-02.jpg') }}" alt="Product"
-                                class="w-full h-[300px] object-cover transition duration-500 group-hover:scale-105" />
-                        </a>
-                        <span
-                            class="absolute top-3 left-3 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded">-50%</span>
-                        <div
-                            class="absolute top-4 right-4 flex flex-col space-y-2 opacity-0 group-hover:opacity-100 transition duration-300 transform translate-x-4 group-hover:translate-x-0">
-                            <button
-                                class="w-10 h-10 bg-white rounded-full shadow hover:bg-primary hover:text-white flex items-center justify-center transition"><i
-                                    class="fas fa-search"></i></button>
-                            <button
-                                class="w-10 h-10 bg-white rounded-full shadow hover:bg-primary hover:text-white flex items-center justify-center transition"><i
-                                    class="fas fa-shopping-bag"></i></button>
-                            <button
-                                class="w-10 h-10 bg-white rounded-full shadow hover:bg-primary hover:text-white flex items-center justify-center transition"><i
-                                    class="fas fa-heart"></i></button>
-                        </div>
-                    </div>
-                    <div class="mt-4 text-center">
-                        <h4 class="text-lg font-medium hover:text-primary transition"><a href="details.php">Simple
-                                minimal Chair</a></h4>
-                        <div class="flex justify-center items-center space-x-2 mt-1">
-                            <span class="text-primary font-bold">$20.00</span>
-                            <span class="text-gray-400 line-through text-sm">$40.00</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="group relative">
-                    <div class="relative overflow-hidden bg-gray-100 rounded-lg">
-                        <a href="details.php">
-                            <img src="{{ asset('assets/images/product/product-03.jpg') }}" alt="Product"
-                                class="w-full h-[300px] object-cover transition duration-500 group-hover:scale-105" />
-                        </a>
-                        <div
-                            class="absolute top-4 right-4 flex flex-col space-y-2 opacity-0 group-hover:opacity-100 transition duration-300 transform translate-x-4 group-hover:translate-x-0">
-                            <button
-                                class="w-10 h-10 bg-white rounded-full shadow hover:bg-primary hover:text-white flex items-center justify-center transition"><i
-                                    class="fas fa-search"></i></button>
-                            <button
-                                class="w-10 h-10 bg-white rounded-full shadow hover:bg-primary hover:text-white flex items-center justify-center transition"><i
-                                    class="fas fa-shopping-bag"></i></button>
-                            <button
-                                class="w-10 h-10 bg-white rounded-full shadow hover:bg-primary hover:text-white flex items-center justify-center transition"><i
-                                    class="fas fa-heart"></i></button>
-                        </div>
-                    </div>
-                    <div class="mt-4 text-center">
-                        <h4 class="text-lg font-medium hover:text-primary transition"><a href="details.php">Pendant
-                                Chandelier Light</a></h4>
-                        <p class="text-primary font-bold mt-1">$40.00</p>
-                    </div>
-                </div>
-
-                <div class="group relative">
-                    <div class="relative overflow-hidden bg-gray-100 rounded-lg">
-                        <a href="details.php">
-                            <img src="{{ asset('assets/images/product/product-04.jpg') }}" alt="Product"
-                                class="w-full h-[300px] object-cover transition duration-500 group-hover:scale-105" />
-                        </a>
-                        <span
-                            class="absolute top-3 left-3 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded">-50%</span>
-                        <div
-                            class="absolute top-4 right-4 flex flex-col space-y-2 opacity-0 group-hover:opacity-100 transition duration-300 transform translate-x-4 group-hover:translate-x-0">
-                            <button
-                                class="w-10 h-10 bg-white rounded-full shadow hover:bg-primary hover:text-white flex items-center justify-center transition"><i
-                                    class="fas fa-search"></i></button>
-                            <button
-                                class="w-10 h-10 bg-white rounded-full shadow hover:bg-primary hover:text-white flex items-center justify-center transition"><i
-                                    class="fas fa-shopping-bag"></i></button>
-                            <button
-                                class="w-10 h-10 bg-white rounded-full shadow hover:bg-primary hover:text-white flex items-center justify-center transition"><i
-                                    class="fas fa-heart"></i></button>
-                        </div>
-                    </div>
-                    <div class="mt-4 text-center">
-                        <h4 class="text-lg font-medium hover:text-primary transition"><a href="details.php">High
-                                quality vase bottle</a></h4>
-                        <div class="flex justify-center items-center space-x-2 mt-1">
-                            <span class="text-primary font-bold">$20.00</span>
-                            <span class="text-gray-400 line-through text-sm">$40.00</span>
-                        </div>
-                    </div>
-                </div>
+                @endforeach
             </div>
         </div>
     </section>
@@ -459,50 +243,27 @@
 
             <div class="swiper-container featured-slider overflow-hidden">
                 <div class="swiper-wrapper">
-                    <div class="swiper-slide">
-                        <div class="group text-center">
-                            <div class="overflow-hidden rounded bg-gray-100 mb-4 relative">
-                                <a href="details.php"><img src="{{ asset('assets/images/product/product-12.jpg') }}"
-                                        class="w-full object-cover group-hover:scale-105 transition duration-500"
-                                        alt="Prod"></a>
+                    @foreach ($featuredProducts as $product)
+                        <div class="swiper-slide">
+                            <div class="group text-center">
+                                <div class="overflow-hidden rounded bg-gray-100 mb-4 relative">
+                                    <a href="{{ route('product.show', $product->slug) }}">
+                                        @if ($product->image)
+                                            <img src="{{ asset('uploads/products/' . $product->image) }}"
+                                                class="w-full object-cover group-hover:scale-105 transition duration-500"
+                                                alt="{{ $product->name }}">
+                                        @else
+                                            <img src="{{ asset('assets/images/product/product-12.jpg') }}"
+                                                class="w-full object-cover group-hover:scale-105 transition duration-500"
+                                                alt="{{ $product->name }}">
+                                        @endif
+                                    </a>
+                                </div>
+                                <h4 class="font-medium"><a href="{{ route('product.show', $product->slug) }}">{{ $product->name }}</a></h4>
+                                <p class="text-primary font-bold">${{ number_format($product->sale_price ?: $product->price, 2) }}</p>
                             </div>
-                            <h4 class="font-medium"><a href="details.php">Modern Accent Chair</a></h4>
-                            <p class="text-primary font-bold">$40.00</p>
                         </div>
-                    </div>
-                    <div class="swiper-slide">
-                        <div class="group text-center">
-                            <div class="overflow-hidden rounded bg-gray-100 mb-4 relative">
-                                <a href="details.php"><img src="{{ asset('assets/images/product/product-08.jpg') }}"
-                                        class="w-full object-cover group-hover:scale-105 transition duration-500"
-                                        alt="Prod"></a>
-                            </div>
-                            <h4 class="font-medium"><a href="details.php">Herman Seater Sofa</a></h4>
-                            <p class="text-primary font-bold">$40.00</p>
-                        </div>
-                    </div>
-                    <div class="swiper-slide">
-                        <div class="group text-center">
-                            <div class="overflow-hidden rounded bg-gray-100 mb-4 relative">
-                                <a href="details.php"><img src="{{ asset('assets/images/product/product-09.jpg') }}"
-                                        class="w-full object-cover group-hover:scale-105 transition duration-500"
-                                        alt="Prod"></a>
-                            </div>
-                            <h4 class="font-medium"><a href="details.php">Reece Seater Sofa</a></h4>
-                            <p class="text-primary font-bold">$40.00</p>
-                        </div>
-                    </div>
-                    <div class="swiper-slide">
-                        <div class="group text-center">
-                            <div class="overflow-hidden rounded bg-gray-100 mb-4 relative">
-                                <a href="details.php"><img src="{{ asset('assets/images/product/product-10.jpg') }}"
-                                        class="w-full object-cover group-hover:scale-105 transition duration-500"
-                                        alt="Prod"></a>
-                            </div>
-                            <h4 class="font-medium"><a href="details.php">Round Swivel Chair</a></h4>
-                            <p class="text-primary font-bold">$40.00</p>
-                        </div>
-                    </div>
+                    @endforeach
                 </div>
             </div>
         </div>

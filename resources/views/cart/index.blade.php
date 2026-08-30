@@ -42,7 +42,7 @@
                                 @foreach ($items as $item)
                                     <tr>
                                     <td class="py-4 px-4 product-thumb" data-label="Image">
-                                        <a href="#">
+                                        <a href="{{ route('product.show', $item['product']->slug) }}">
                                             @if ($item['product']->image)
                                                 <img src="{{ asset('uploads/products/' . $item['product']->image) }}" class="w-20 h-20 object-cover rounded" alt="{{ $item['product']->name }}">
                                             @else
@@ -51,7 +51,7 @@
                                         </a>
                                     </td>
                                     <td class="py-4 px-4" data-label="Product">
-                                        <h6 class="font-bold text-gray-800"><a href="#" class="hover:text-primary">{{$item['product']->name}}</a></h6>
+                                        <h6 class="font-bold text-gray-800"><a href="{{ route('product.show', $item['product']->slug) }}" class="hover:text-primary">{{$item['product']->name}}</a></h6>
                                         <div class="text-sm mt-1">
                                             @if ($item['product']->sale_price)
                                                 <span class="line-through text-gray-400 mr-2">${{ number_format($item['product']->price, 2) }}</span>

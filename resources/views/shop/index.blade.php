@@ -206,7 +206,7 @@
                     @forelse ($products as $product)
                         <div class="group">
                         <div class="relative overflow-hidden bg-gray-100 rounded-lg mb-4">
-                            <a href="details.php">
+                            <a href="{{ route('product.show', $product->slug) }}">
                                 @if ( $product->image )
                                     <img src="{{ asset('uploads/products/' . $product->image) }}" alt="{{$product->name}}"
                                     class="w-full h-[300px] object-cover transition duration-500 group-hover:scale-105" />
@@ -235,7 +235,7 @@
                             </div>
                         </div>
                         <div class="text-center">
-                            <h4 class="text-lg font-medium hover:text-primary"><a href="details.php">{{$product->name}}</a></h4>
+                            <h4 class="text-lg font-medium hover:text-primary"><a href="{{ route('product.show', $product->slug) }}">{{$product->name}}</a></h4>
                             <p class="text-primary font-bold mt-1">${{$product->sale_price ? $product->sale_price : $product->price}}</p>
                         </div>
                     </div>
@@ -250,7 +250,7 @@
                         <div
                         class="flex flex-col md:flex-row gap-6 bg-white border rounded-lg p-4 hover:shadow-lg transition">
                         <div class="w-full md:w-1/3 relative bg-gray-100 rounded overflow-hidden">
-                            <a href="details.php">
+                            <a href="{{ route('product.show', $product->slug) }}">
                                 @if ($product->image)
                                     <img src="{{asset('uploads/products/' . $product->image)}}" alt="{{$product->name}}"
                                     class="w-full h-full object-cover">
@@ -261,7 +261,7 @@
                             </a>
                         </div>
                         <div class="w-full md:w-2/3 flex flex-col justify-center">
-                            <h4 class="text-xl font-bold hover:text-primary mb-2"><a href="details.php">{{$product->name}}</a></h4>
+                            <h4 class="text-xl font-bold hover:text-primary mb-2"><a href="{{ route('product.show', $product->slug) }}">{{$product->name}}</a></h4>
                             <p class="text-primary font-bold text-lg mb-4">${{$product->sale_price ? $product->sale_price : $product->price}}</p>
                             @if ($product->short_description)
                                 <p class="text-gray-600 mb-6 text-sm leading-relaxed">
