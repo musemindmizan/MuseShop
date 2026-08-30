@@ -125,7 +125,7 @@
 
                     <p class="px-4 text-xs font-semibold text-gray-300 uppercase mt-4 mb-2">Settings</p>
 
-                    <a href="settings.php"
+                    <a href="{{route('admin.settings')}}"
                         class="nav-link flex items-center gap-3 px-4 py-2.5 text-gray-100 hover:text-white hover:bg-gray-800 rounded-lg transition">
                         <i class="fa-solid fa-gear w-5 text-center"></i>
                         <span>General Settings</span>

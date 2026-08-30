@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\CouponController;
 use App\Http\Controllers\Admin\CustomerController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\OrderController;
+use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CheckoutController;
@@ -104,6 +105,12 @@ Route::middleware([AuthAdmin::class])->group(function() {
     Route::get('/admin/coupon/edit/{id}', [CouponController::class, 'edit'])->name('admin.coupon.edit');
     Route::post('/admin/coupon/edit/{id}', [CouponController::class, 'update'])->name('admin.coupon.update');
     Route::delete('/admin/coupon/delete/{id}', [CouponController::class, 'destroy'])->name('admin.coupon.delete');
+
+    // Settings
+    Route::get('/admin/settings', [SettingController::class, 'index'])->name('admin.settings');
+    Route::post('/admin/settings/profile', [SettingController::class, 'updateProfile'])->name('admin.settings.profile');
+    Route::post('/admin/settings/password', [SettingController::class, 'updatePassword'])->name('admin.settings.password');
+    Route::post('/admin/settings/store', [SettingController::class, 'updateStore'])->name('admin.settings.store');
 });
 
 require __DIR__.'/auth.php';
