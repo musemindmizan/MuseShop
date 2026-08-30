@@ -28,7 +28,13 @@ class CheckoutController extends Controller
 
         $total = $this->cart->total();
 
-        return view('checkout.index', compact('items', 'total'));
+        $appliedCoupon = $this->cart->appliedCoupon();
+
+        $discount = $this->cart->discount();
+
+        $grandTotal = $this->cart->grandTotal();
+
+        return view('checkout.index', compact('items', 'total', 'appliedCoupon', 'discount', 'grandTotal'));
     }
 
     public function store( StoreCheckoutRequest $request )
@@ -46,7 +52,12 @@ class CheckoutController extends Controller
             }
         }
 
-        $order = DB::transaction(function () use ($request, $items) {
+        $subtotal = $items->sum('subtotal');
+
+        $coupon = $this->cart->appliedCoupon();
+        $discount = $coupon ? $coupon->calculateDiscount($subtotal) : 0;
+
+        $order = DB::transaction(function () use ($request, $items, $subtotal, $coupon, $discount) {
             $order = Order::create([
                 'user_id' => $request->user()->id,
                 'order_number' => 'ORD-' . now()->format('Ymd') . '-' . strtoupper(Str::random(6)),
@@ -60,8 +71,10 @@ class CheckoutController extends Controller
                 'state' => $request->state,
                 'postal_code' => $request->zip,
                 'notes' => $request->notes,
+                'coupon_code' => $coupon?->code,
+                'discount_amount' => $discount,
                 'payment_method' => $request->mode,
-                'total' => $items->sum('subtotal'),
+                'total' => max($subtotal - $discount, 0),
                 'status' => 'pending',
             ]);
 
@@ -76,6 +89,10 @@ class CheckoutController extends Controller
                 ]);
 
                 $item['product']->decrement('stock', $item['quantity']);
+            }
+
+            if( $coupon ) {
+                $coupon->increment('used_count');
             }
 
             return $order;

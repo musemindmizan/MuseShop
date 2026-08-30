@@ -62,6 +62,16 @@
                             </tbody>
                             <tfoot>
                                 <tr class="border-t bg-gray-50">
+                                    <td colspan="3" class="px-6 py-4 text-right font-medium text-gray-500">Subtotal</td>
+                                    <td class="px-6 py-4 text-gray-700">${{ number_format($order->items->sum('subtotal'), 2) }}</td>
+                                </tr>
+                                @if ($order->discount_amount > 0)
+                                    <tr class="bg-gray-50">
+                                        <td colspan="3" class="px-6 py-4 text-right font-medium text-green-600">Coupon Discount ({{ $order->coupon_code }})</td>
+                                        <td class="px-6 py-4 text-green-600">-${{ number_format($order->discount_amount, 2) }}</td>
+                                    </tr>
+                                @endif
+                                <tr class="border-t bg-gray-50">
                                     <td colspan="3" class="px-6 py-4 text-right font-bold text-gray-700">Total</td>
                                     <td class="px-6 py-4 font-bold text-primary">${{ number_format($order->total, 2) }}</td>
                                 </tr>

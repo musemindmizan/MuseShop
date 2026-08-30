@@ -136,6 +136,16 @@
                     <td class="text-right">${{ number_format($item->subtotal, 2) }}</td>
                 </tr>
             @endforeach
+            <tr>
+                <td colspan="3" class="text-right">Subtotal</td>
+                <td class="text-right">${{ number_format($order->items->sum('subtotal'), 2) }}</td>
+            </tr>
+            @if ($order->discount_amount > 0)
+                <tr>
+                    <td colspan="3" class="text-right">Coupon Discount ({{ $order->coupon_code }})</td>
+                    <td class="text-right">-${{ number_format($order->discount_amount, 2) }}</td>
+                </tr>
+            @endif
             <tr class="total-row">
                 <td colspan="3" class="text-right">Total</td>
                 <td class="text-right">${{ number_format($order->total, 2) }}</td>

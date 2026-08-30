@@ -100,10 +100,27 @@
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
                         <div class="bg-gray-50 p-6 rounded border">
                             <h4 class="font-bold text-lg mb-2">Coupon Code</h4>
-                            <form class="space-y-4" onsubmit="return false">
-                                <input type="text" placeholder="Enter coupon code..." class="w-full border p-3 rounded bg-gray-100 text-gray-400">
-                                <button type="button" disabled class="bg-gray-300 text-gray-500 px-6 py-3 rounded w-full">Apply Coupon</button>
-                            </form>
+                            @if ($appliedCoupon)
+                                <div class="flex items-center justify-between bg-green-50 border border-green-200 rounded p-3">
+                                    <div>
+                                        <p class="text-sm font-bold text-green-700">{{ $appliedCoupon->code }}</p>
+                                        <p class="text-xs text-green-600">
+                                            {{ $appliedCoupon->type === 'percentage' ? rtrim(rtrim(number_format($appliedCoupon->value, 2), '0'), '.') . '%' : '$' . number_format($appliedCoupon->value, 2) }} off applied
+                                        </p>
+                                    </div>
+                                    <form action="{{ route('cart.coupon.remove') }}" method="POST">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="text-red-500 hover:text-red-700 text-sm font-medium">Remove</button>
+                                    </form>
+                                </div>
+                            @else
+                                <form action="{{ route('cart.coupon.apply') }}" method="POST" class="space-y-4">
+                                    @csrf
+                                    <input type="text" name="code" placeholder="Enter coupon code..." class="w-full border p-3 rounded focus:outline-none focus:border-primary">
+                                    <button type="submit" class="bg-sky-800 text-white px-6 py-3 rounded hover:bg-primary transition w-full">Apply Coupon</button>
+                                </form>
+                            @endif
                         </div>
 
                         <div class="bg-gray-50 p-6 rounded border">
@@ -113,9 +130,15 @@
                                     <span class="font-medium">Subtotal</span>
                                     <span class="font-bold">${{ number_format($total, 2) }}</span>
                                 </div>
+                                @if ($discount > 0)
+                                    <div class="flex justify-between border-b pb-2 text-green-600">
+                                        <span class="font-medium">Discount ({{ $appliedCoupon->code }})</span>
+                                        <span class="font-bold">-${{ number_format($discount, 2) }}</span>
+                                    </div>
+                                @endif
                                 <div class="flex justify-between pt-2">
                                     <span class="font-bold text-lg">Total</span>
-                                    <span class="font-bold text-lg text-primary">${{ number_format($total, 2) }}</span>
+                                    <span class="font-bold text-lg text-primary">${{ number_format($grandTotal, 2) }}</span>
                                 </div>
                             </div>
                             <a href="{{ route('checkout.index') }}" class="block bg-primary text-white text-center px-6 py-3 rounded hover:bg-blue-600 transition w-full">Proceed To Checkout</a>

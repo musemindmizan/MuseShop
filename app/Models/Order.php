@@ -19,6 +19,8 @@ class Order extends Model
         'state',
         'postal_code',
         'notes',
+        'coupon_code',
+        'discount_amount',
         'payment_method',
         'total',
         'status',

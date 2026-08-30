@@ -21,7 +21,13 @@ class CartController extends Controller
 
         $total = $this->cart->total();
 
-        return view('cart.index', compact('items', 'total'));
+        $appliedCoupon = $this->cart->appliedCoupon();
+
+        $discount = $this->cart->discount();
+
+        $grandTotal = $this->cart->grandTotal();
+
+        return view('cart.index', compact('items', 'total', 'appliedCoupon', 'discount', 'grandTotal'));
     }
 
     public function store(Request $request, $productId)
@@ -78,5 +84,23 @@ class CartController extends Controller
         $this->cart->clear();
 
         return back()->with('success', 'Cart cleared!');
+    }
+
+    public function applyCoupon(Request $request)
+    {
+        $request->validate([
+            'code' => 'required|string',
+        ]);
+
+        $result = $this->cart->applyCoupon($request->code);
+
+        return back()->with($result['success'] ? 'success' : 'error', $result['message']);
+    }
+
+    public function removeCoupon()
+    {
+        $this->cart->removeCoupon();
+
+        return back()->with('success', 'Coupon removed.');
     }
 }

@@ -150,13 +150,19 @@
                                             <td class="p-4 font-bold">Subtotal</td>
                                             <td class="p-4 text-right">${{ number_format($total, 2) }}</td>
                                         </tr>
+                                        @if ($discount > 0)
+                                            <tr class="text-green-600">
+                                                <td class="p-4 font-bold">Discount ({{ $appliedCoupon->code }})</td>
+                                                <td class="p-4 text-right font-bold">-${{ number_format($discount, 2) }}</td>
+                                            </tr>
+                                        @endif
                                         <tr>
                                             <td class="p-4 font-bold">Shipping</td>
                                             <td class="p-4 text-right">Free</td>
                                         </tr>
                                         <tr class="text-primary text-lg">
                                             <td class="p-4 font-bold">Total</td>
-                                            <td class="p-4 text-right font-bold">${{ number_format($total, 2) }}</td>
+                                            <td class="p-4 text-right font-bold">${{ number_format($grandTotal, 2) }}</td>
                                         </tr>
                                     </tfoot>
                                 </table>

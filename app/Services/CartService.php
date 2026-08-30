@@ -2,12 +2,14 @@
 
 namespace App\Services;
 
+use App\Models\Coupon;
 use App\Models\Product;
 use Illuminate\Support\Collection;
 
 class CartService
 {
     protected const SESSION_KEY = 'cart';
+    protected const COUPON_SESSION_KEY = 'applied_coupon';
 
     public function add(int $productId, int $quantity = 1): void
     {
@@ -53,6 +55,7 @@ class CartService
     public function clear(): void
     {
         session()->forget(self::SESSION_KEY);
+        $this->removeCoupon();
     }
 
     public function items(): Collection
@@ -86,6 +89,57 @@ class CartService
     public function total(): float
     {
         return $this->items()->sum('subtotal');
+    }
+
+    public function applyCoupon(string $code): array
+    {
+        $coupon = Coupon::where('code', strtoupper(trim($code)))->first();
+
+        if( ! $coupon ) {
+            return ['success' => false, 'message' => 'Invalid coupon code.'];
+        }
+
+        if( ! $coupon->isValid($this->total()) ) {
+            return ['success' => false, 'message' => 'This coupon is not valid for your order.'];
+        }
+
+        session([self::COUPON_SESSION_KEY => $coupon->code]);
+
+        return ['success' => true, 'message' => 'Coupon applied!'];
+    }
+
+    public function removeCoupon(): void
+    {
+        session()->forget(self::COUPON_SESSION_KEY);
+    }
+
+    public function appliedCoupon(): ?Coupon
+    {
+        $code = session(self::COUPON_SESSION_KEY);
+
+        if( ! $code ) {
+            return null;
+        }
+
+        $coupon = Coupon::where('code', $code)->first();
+
+        if( ! $coupon || ! $coupon->isValid($this->total()) ) {
+            return null;
+        }
+
+        return $coupon;
+    }
+
+    public function discount(): float
+    {
+        $coupon = $this->appliedCoupon();
+
+        return $coupon ? $coupon->calculateDiscount($this->total()) : 0;
+    }
+
+    public function grandTotal(): float
+    {
+        return max($this->total() - $this->discount(), 0);
     }
 
     protected function raw(): array

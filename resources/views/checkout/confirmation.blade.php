@@ -28,6 +28,9 @@
                         <h4 class="font-bold border-b pb-2 mb-4">Order Details</h4>
                         <ul class="space-y-2 text-sm">
                             <li class="flex justify-between"><span>Date:</span> <span class="font-medium">{{ $order->created_at->format('F d, Y') }}</span></li>
+                            @if ($order->discount_amount > 0)
+                                <li class="flex justify-between"><span>Coupon ({{ $order->coupon_code }}):</span> <span class="font-medium text-green-600">-${{ number_format($order->discount_amount, 2) }}</span></li>
+                            @endif
                             <li class="flex justify-between"><span>Total:</span> <span class="font-medium text-primary">${{ number_format($order->total, 2) }}</span></li>
                             <li class="flex justify-between"><span>Payment Mode:</span> <span class="font-medium">{{ $order->payment_method === 'cod' ? 'Cash on Delivery' : $order->payment_method }}</span></li>
                             <li class="flex justify-between"><span>Status:</span> <span class="font-medium capitalize">{{ $order->status }}</span></li>

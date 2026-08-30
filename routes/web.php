@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\CouponController;
 use App\Http\Controllers\Admin\CustomerController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\OrderController;
@@ -32,6 +33,8 @@ Route::post('/cart/update/{productId}', [CartController::class, 'update'])->name
 Route::post('/cart/bulk-update', [CartController::class, 'bulkUpdate'])->name('cart.bulk-update');
 Route::delete('/cart/remove/{productId}', [CartController::class, 'destroy'])->name('cart.remove');
 Route::delete('/cart/clear', [CartController::class, 'clear'])->name('cart.clear');
+Route::post('/cart/coupon/apply', [CartController::class, 'applyCoupon'])->name('cart.coupon.apply');
+Route::delete('/cart/coupon/remove', [CartController::class, 'removeCoupon'])->name('cart.coupon.remove');
 
 Route::get('/dashboard', function () {
     return view('dashboard');
@@ -93,6 +96,14 @@ Route::middleware([AuthAdmin::class])->group(function() {
     Route::get('/admin/customers', [CustomerController::class, 'index'])->name('admin.customers');
     Route::get('/admin/customers/export', [CustomerController::class, 'export'])->name('admin.customers.export');
     Route::get('/admin/customers/{customer}', [CustomerController::class, 'show'])->name('admin.customer.show');
+
+    // Coupons
+    Route::get('/admin/coupons', [CouponController::class, 'index'])->name('admin.coupons');
+    Route::get('/admin/coupon/create', [CouponController::class, 'create'])->name('admin.coupon.create');
+    Route::post('/admin/coupon/create', [CouponController::class, 'store'])->name('admin.coupon.store');
+    Route::get('/admin/coupon/edit/{id}', [CouponController::class, 'edit'])->name('admin.coupon.edit');
+    Route::post('/admin/coupon/edit/{id}', [CouponController::class, 'update'])->name('admin.coupon.update');
+    Route::delete('/admin/coupon/delete/{id}', [CouponController::class, 'destroy'])->name('admin.coupon.delete');
 });
 
 require __DIR__.'/auth.php';
