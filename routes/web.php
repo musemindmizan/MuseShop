@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\CustomerController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\AdminController;
@@ -87,6 +88,11 @@ Route::middleware([AuthAdmin::class])->group(function() {
     Route::get('/admin/orders/{order}', [OrderController::class, 'show'])->name('order.show');
     Route::post('/admin/orders/{order}/status', [OrderController::class, 'updateStatus'])->name('order.update-status');
     Route::get('/admin/orders/{order}/invoice', [OrderController::class, 'downloadInvoice'])->name('order.invoice');
+
+    // Customers
+    Route::get('/admin/customers', [CustomerController::class, 'index'])->name('admin.customers');
+    Route::get('/admin/customers/export', [CustomerController::class, 'export'])->name('admin.customers.export');
+    Route::get('/admin/customers/{customer}', [CustomerController::class, 'show'])->name('admin.customer.show');
 });
 
 require __DIR__.'/auth.php';
