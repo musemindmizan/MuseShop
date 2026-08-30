@@ -118,7 +118,7 @@
                                     <span class="font-bold text-lg text-primary">${{ number_format($total, 2) }}</span>
                                 </div>
                             </div>
-                            <button type="button" class="block bg-gray-300 text-gray-500 text-center px-6 py-3 rounded w-full">Proceed To Checkout</button>
+                            <a href="{{ route('checkout.index') }}" class="block bg-primary text-white text-center px-6 py-3 rounded hover:bg-blue-600 transition w-full">Proceed To Checkout</a>
                         </div>
                     </div>
 

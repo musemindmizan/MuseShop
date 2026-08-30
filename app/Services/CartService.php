@@ -13,11 +13,15 @@ class CartService
     {
         $product = Product::findOrFail($productId);
 
+        if( $product->stock <= 0 ) {
+            return;
+        }
+
         $cart = $this->raw();
 
         $newQuantity = ($cart[$productId] ?? 0) + $quantity;
 
-        $cart[$productId] = min($newQuantity, max($product->stock, 0));
+        $cart[$productId] = min($newQuantity, $product->stock);
 
         session([self::SESSION_KEY => $cart]);
     }
@@ -28,10 +32,10 @@ class CartService
 
         $cart = $this->raw();
 
-        if( $quantity <= 0 ) {
+        if( $quantity <= 0 || $product->stock <= 0 ) {
             unset($cart[$productId]);
         } else {
-            $cart[$productId] = min($quantity, max($product->stock, 0));
+            $cart[$productId] = min($quantity, $product->stock);
         }
 
         session([self::SESSION_KEY => $cart]);
