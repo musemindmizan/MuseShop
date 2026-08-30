@@ -62,7 +62,7 @@
                         <ul class="flex space-x-8 font-medium text-gray-700">
                             <li><a href="{{route('home.index')}}" class="hover:text-primary transition">Home</a></li>
                             <li><a href="{{route('shop.index')}}" class="hover:text-primary transition">Shop</a></li>
-                            <li><a href="cart.php" class="hover:text-primary transition">Cart</a></li>
+                            <li><a href="{{route('cart.index')}}" class="hover:text-primary transition">Cart</a></li>
                             <li><a href="wishlist.php" class="hover:text-primary transition">Wishlist</a></li>
                             <li><a href="contact.php" class="hover:text-primary transition">Contact</a></li>
                         </ul>
@@ -85,10 +85,12 @@
 
                     <a href="wishlist.php" class="text-2xl hover:text-primary"><i class="fa-regular fa-heart"></i></a>
 
-                    <a href="cart.php" class="text-2xl hover:text-primary relative">
+                    <a href="{{route('cart.index')}}" class="text-2xl hover:text-primary relative">
                         <i class="fa-solid fa-bag-shopping"></i>
-                        <span
-                            class="absolute -top-2 -right-2 bg-primary text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">3</span>
+                        @if ($cartCount > 0)
+                            <span
+                                class="absolute -top-2 -right-2 bg-primary text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">{{ $cartCount }}</span>
+                        @endif
                     </a>
 
                     <div class="relative group">
@@ -143,10 +145,12 @@
                         <i class="fa-regular fa-heart"></i>
                     </a>
 
-                    <a href="cart.php" class="text-xl hover:text-primary relative">
+                    <a href="{{route('cart.index')}}" class="text-xl hover:text-primary relative">
                         <i class="fa-solid fa-bag-shopping"></i>
-                        <span
-                            class="absolute -top-2 -right-2 bg-primary text-white text-[10px] rounded-full w-4 h-4 flex items-center justify-center">3</span>
+                        @if ($cartCount > 0)
+                            <span
+                                class="absolute -top-2 -right-2 bg-primary text-white text-[10px] rounded-full w-4 h-4 flex items-center justify-center">{{ $cartCount }}</span>
+                        @endif
                     </a>
 
                     <div class="relative">
@@ -193,7 +197,7 @@
             <ul class="space-y-4">
                 <li><a href="{{route('home.index')}}" class="block hover:text-primary">Home</a></li>
                 <li><a href="{{route('shop.index')}}" class="block hover:text-primary">Shop</a></li>
-                <li><a href="cart.php" class="block hover:text-primary">Cart</a></li>
+                <li><a href="{{route('cart.index')}}" class="block hover:text-primary">Cart</a></li>
                 <li><a href="wishlist.php" class="block hover:text-primary">Wishlist</a></li>
                 <li><a href="contact.php" class="block hover:text-primary">Contact</a></li>
             </ul>
@@ -254,7 +258,7 @@
                     <h4 class="text-white font-bold text-lg mb-6">My Account</h4>
                     <ul class="space-y-2 text-sm">
                         <li><a href="login.php" class="hover:text-primary transition">Sign In</a></li>
-                        <li><a href="cart.php" class="hover:text-primary transition">View Cart</a></li>
+                        <li><a href="{{route('cart.index')}}" class="hover:text-primary transition">View Cart</a></li>
                         <li><a href="wishlist.php" class="hover:text-primary transition">My Wishlist</a></li>
                         <li><a href="#" class="hover:text-primary transition">Track My Order</a></li>
                     </ul>

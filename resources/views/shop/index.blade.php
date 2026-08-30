@@ -221,10 +221,13 @@
                                     class="w-10 h-10 bg-white rounded-full shadow hover:bg-primary hover:text-white flex items-center justify-center transition">
                                     <i class="fa-regular fa-heart"></i>
                                 </button>
-                                <button
-                                    class="w-10 h-10 bg-white rounded-full shadow hover:bg-primary hover:text-white flex items-center justify-center transition">
-                                    <i class="fa-solid fa-bag-shopping"></i>
-                                </button>
+                                <form action="{{ route('cart.add', $product->id) }}" method="POST">
+                                    @csrf
+                                    <button type="submit" {{ $product->stock <= 0 ? 'disabled' : '' }}
+                                        class="w-10 h-10 bg-white rounded-full shadow hover:bg-primary hover:text-white flex items-center justify-center transition disabled:opacity-50 disabled:cursor-not-allowed">
+                                        <i class="fa-solid fa-bag-shopping"></i>
+                                    </button>
+                                </form>
                                 <button
                                     class="w-10 h-10 bg-white rounded-full shadow hover:bg-primary hover:text-white flex items-center justify-center transition">
                                     <i class="fa-solid fa-magnifying-glass"></i>
@@ -269,9 +272,12 @@
                                 <button
                                     class="px-4 py-2 border rounded hover:bg-primary hover:text-white transition"><i
                                         class="fa-regular fa-heart"></i></button>
-                                <button
-                                    class="px-4 py-2 border rounded hover:bg-primary hover:text-white transition"><i
-                                        class="fa-solid fa-bag-shopping"></i> Add to Cart</button>
+                                <form action="{{ route('cart.add', $product->id) }}" method="POST">
+                                    @csrf
+                                    <button type="submit" {{ $product->stock <= 0 ? 'disabled' : '' }}
+                                        class="px-4 py-2 border rounded hover:bg-primary hover:text-white transition disabled:opacity-50 disabled:cursor-not-allowed"><i
+                                            class="fa-solid fa-bag-shopping"></i> {{ $product->stock <= 0 ? 'Out of Stock' : 'Add to Cart' }}</button>
+                                </form>
                                 <button
                                     class="px-4 py-2 border rounded hover:bg-primary hover:text-white transition"><i
                                         class="fa-solid fa-magnifying-glass"></i></button>
