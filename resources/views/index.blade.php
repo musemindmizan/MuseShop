@@ -144,9 +144,12 @@
                                         class="w-10 h-10 bg-white rounded-full shadow hover:bg-primary hover:text-white flex items-center justify-center transition disabled:opacity-50 disabled:cursor-not-allowed"><i
                                             class="fas fa-shopping-bag"></i></button>
                                 </form>
-                                <button
-                                    class="w-10 h-10 bg-white rounded-full shadow hover:bg-primary hover:text-white flex items-center justify-center transition"><i
-                                        class="fas fa-heart"></i></button>
+                                <form action="{{ route('wishlist.toggle', $product->id) }}" method="POST">
+                                    @csrf
+                                    <button type="submit"
+                                        class="w-10 h-10 bg-white rounded-full shadow hover:bg-primary hover:text-white flex items-center justify-center transition {{ in_array($product->id, $wishlistProductIds) ? 'text-red-500' : '' }}"><i
+                                            class="{{ in_array($product->id, $wishlistProductIds) ? 'fas' : 'far' }} fa-heart"></i></button>
+                                </form>
                             </div>
                         </div>
                         <div class="mt-4 text-center">

@@ -99,9 +99,9 @@
                         @endif
 
                         <div class="flex space-x-2">
-                            <a href="#"
-                                class="w-10 h-10 flex items-center justify-center border rounded hover:bg-primary hover:text-white transition"><i
-                                    class="fa-regular fa-heart text-xl"></i></a>
+                            <button type="submit" formaction="{{ route('wishlist.toggle', $product->id) }}" formmethod="POST"
+                                class="w-10 h-10 flex items-center justify-center border rounded hover:bg-primary hover:text-white transition {{ in_array($product->id, $wishlistProductIds) ? 'text-red-500' : '' }}"><i
+                                    class="{{ in_array($product->id, $wishlistProductIds) ? 'fa-solid' : 'fa-regular' }} fa-heart text-xl"></i></button>
                             <a href="#"
                                 class="w-10 h-10 flex items-center justify-center border rounded hover:bg-primary hover:text-white transition"><i
                                     class="fa-solid fa-shuffle text-xl"></i></a>
@@ -207,9 +207,12 @@
                                                     class="w-8 h-8 bg-white rounded shadow hover:bg-primary hover:text-white flex items-center justify-center transition disabled:opacity-50 disabled:cursor-not-allowed"><i
                                                         class="fa-solid fa-bag-shopping"></i></button>
                                             </form>
-                                            <a href="#"
-                                                class="w-8 h-8 bg-white rounded shadow hover:bg-primary hover:text-white flex items-center justify-center transition"><i
-                                                    class="fa-regular fa-heart"></i></a>
+                                            <form action="{{ route('wishlist.toggle', $related->id) }}" method="POST">
+                                                @csrf
+                                                <button type="submit"
+                                                    class="w-8 h-8 bg-white rounded shadow hover:bg-primary hover:text-white flex items-center justify-center transition {{ in_array($related->id, $wishlistProductIds) ? 'text-red-500' : '' }}"><i
+                                                        class="{{ in_array($related->id, $wishlistProductIds) ? 'fa-solid' : 'fa-regular' }} fa-heart"></i></button>
+                                            </form>
                                         </div>
                                     </div>
                                     <h4 class="font-medium hover:text-primary"><a href="{{ route('product.show', $related->slug) }}">{{ $related->name }}</a></h4>

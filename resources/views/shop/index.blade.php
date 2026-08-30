@@ -217,10 +217,13 @@
                             </a>
                             <div
                                 class="absolute bottom-4 left-0 right-0 flex justify-center space-x-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                                <button
-                                    class="w-10 h-10 bg-white rounded-full shadow hover:bg-primary hover:text-white flex items-center justify-center transition">
-                                    <i class="fa-regular fa-heart"></i>
-                                </button>
+                                <form action="{{ route('wishlist.toggle', $product->id) }}" method="POST">
+                                    @csrf
+                                    <button type="submit"
+                                        class="w-10 h-10 bg-white rounded-full shadow hover:bg-primary hover:text-white flex items-center justify-center transition {{ in_array($product->id, $wishlistProductIds) ? 'text-red-500' : '' }}">
+                                        <i class="{{ in_array($product->id, $wishlistProductIds) ? 'fa-solid' : 'fa-regular' }} fa-heart"></i>
+                                    </button>
+                                </form>
                                 <form action="{{ route('cart.add', $product->id) }}" method="POST">
                                     @csrf
                                     <button type="submit" {{ $product->stock <= 0 ? 'disabled' : '' }}
@@ -269,9 +272,12 @@
                             </p>
                             @endif
                             <div class="flex space-x-2">
-                                <button
-                                    class="px-4 py-2 border rounded hover:bg-primary hover:text-white transition"><i
-                                        class="fa-regular fa-heart"></i></button>
+                                <form action="{{ route('wishlist.toggle', $product->id) }}" method="POST">
+                                    @csrf
+                                    <button type="submit"
+                                        class="px-4 py-2 border rounded hover:bg-primary hover:text-white transition {{ in_array($product->id, $wishlistProductIds) ? 'text-red-500' : '' }}"><i
+                                            class="{{ in_array($product->id, $wishlistProductIds) ? 'fa-solid' : 'fa-regular' }} fa-heart"></i></button>
+                                </form>
                                 <form action="{{ route('cart.add', $product->id) }}" method="POST">
                                     @csrf
                                     <button type="submit" {{ $product->stock <= 0 ? 'disabled' : '' }}
