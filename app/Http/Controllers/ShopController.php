@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\Category;
 use App\Models\Brand;
@@ -10,11 +9,41 @@ use App\Models\Brand;
 class ShopController extends Controller
 {
     public function index() {
-        $products = Product::latest()->paginate(12);
+        $query = Product::query()->where('status', 1);
 
-        $brands = Brand::select('id', 'name')->get();
+        if( request()->filled('search') ) {
+            $query->where('name', 'LIKE', '%' . request('search') . '%');
+        }
 
-        $categories = Category::select('id', 'name')->get();
+        if( request()->filled('categories') ) {
+            $query->whereIn('category_id', request('categories'));
+        }
+
+        if( request()->filled('brands') ) {
+            $query->whereIn('brand_id', request('brands'));
+        }
+
+        if( request()->filled('min_price') ) {
+            $query->where('price', '>=', request('min_price'));
+        }
+
+        if( request()->filled('max_price') ) {
+            $query->where('price', '<=', request('max_price'));
+        }
+
+        match (request('sort')) {
+            'price_low'  => $query->orderBy('price', 'asc'),
+            'price_high' => $query->orderBy('price', 'desc'),
+            'featured'   => $query->where('featured', 1)->latest(),
+            'oldest'     => $query->oldest(),
+            default      => $query->latest(),
+        };
+
+        $products = $query->paginate(12)->withQueryString();
+
+        $brands = Brand::select('id', 'name')->where('status', 1)->get();
+
+        $categories = Category::select('id', 'name')->where('status', 1)->get();
 
         return view('shop.index', compact('products', 'brands', 'categories'));
     }

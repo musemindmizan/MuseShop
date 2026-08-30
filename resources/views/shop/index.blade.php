@@ -1,4 +1,16 @@
 <x-app-layout>
+    <style>
+        .range-thumb-only {
+            pointer-events: none;
+        }
+        .range-thumb-only::-webkit-slider-thumb {
+            pointer-events: auto;
+        }
+        .range-thumb-only::-moz-range-thumb {
+            pointer-events: auto;
+        }
+    </style>
+
     <div class="relative bg-sky-700 text-white h-64 flex items-center justify-center bg-cover bg-center"
         style="background-image: url('assets/images/page-banner.jpg');">
         <div class="absolute inset-0 bg-black bg-opacity-40"></div>
@@ -17,13 +29,26 @@
 
             <aside class="w-full lg:w-1/4 order-2 lg:order-1 space-y-8">
 
+                <form id="shop-filter-form" method="GET" action="{{ route('shop.index') }}" class="space-y-8">
+                <input type="hidden" name="sort" value="{{ request('sort') }}">
+
+                @if ( request()->filled('search') || request()->filled('categories') || request()->filled('brands') || request()->filled('min_price') || request()->filled('max_price') )
+                    <div class="bg-gray-50 p-6 rounded-lg border flex items-center justify-between">
+                        <span class="text-sm text-gray-600">Filters applied</span>
+                        <a href="{{ route('shop.index') }}"
+                            class="text-sm font-medium text-primary hover:underline flex items-center gap-1">
+                            <i class="fa fa-xmark"></i> Clear Filter
+                        </a>
+                    </div>
+                @endif
+
                 <div class="bg-gray-50 p-6 rounded-lg border">
-                    <form class="relative">
-                        <input type="text" placeholder="Search product..."
+                    <div class="relative">
+                        <input type="text" name="search" value="{{ request('search') }}" placeholder="Search product..."
                             class="w-full border p-3 rounded focus:outline-none focus:border-primary pr-10">
-                        <button class="absolute right-3 top-3 text-gray-400 hover:text-primary"><i
+                        <button type="submit" class="absolute right-3 top-3 text-gray-400 hover:text-primary"><i
                                 class="fa fa-search"></i></button>
-                    </form>
+                    </div>
                 </div>
 
                 <div class="bg-gray-50 p-6 rounded-lg border">
@@ -32,11 +57,13 @@
                         @foreach ($categories as $category)
                             <li class="flex items-center">
                             <label class="flex items-center cursor-pointer hover:text-primary">
-                                <input type="checkbox" class="custom-checkbox hidden">
+                                <input type="checkbox" name="categories[]" value="{{ $category->id }}"
+                                    class="peer hidden" onchange="this.form.submit()"
+                                    {{ in_array($category->id, (array) request('categories', [])) ? 'checked' : '' }}>
                                 <div
-                                    class="w-4 h-4 border border-gray-300 rounded mr-3 flex items-center justify-center bg-white transition">
+                                    class="w-4 h-4 border border-gray-300 rounded mr-3 flex items-center justify-center bg-white peer-checked:bg-primary peer-checked:border-primary transition">
                                 </div>
-                                {{$category->name}}
+                                <span class="peer-checked:text-primary">{{$category->name}}</span>
                             </label>
                         </li>
                         @endforeach
@@ -49,11 +76,13 @@
                         @foreach ($brands as $brand)
                             <li class="flex items-center">
                             <label class="flex items-center cursor-pointer hover:text-primary">
-                                <input type="checkbox" class="custom-checkbox hidden">
+                                <input type="checkbox" name="brands[]" value="{{ $brand->id }}"
+                                    class="peer hidden" onchange="this.form.submit()"
+                                    {{ in_array($brand->id, (array) request('brands', [])) ? 'checked' : '' }}>
                                 <div
-                                    class="w-4 h-4 border border-gray-300 rounded mr-3 flex items-center justify-center bg-white transition">
+                                    class="w-4 h-4 border border-gray-300 rounded mr-3 flex items-center justify-center bg-white peer-checked:bg-primary peer-checked:border-primary transition">
                                 </div>
-                                {{$brand->name}}
+                                <span class="peer-checked:text-primary">{{$brand->name}}</span>
                             </label>
                         </li>
                         @endforeach
@@ -64,24 +93,24 @@
                     <h4 class="font-bold text-lg mb-4">Filter By Price</h4>
                     <div class="relative pt-6 pb-2">
                         <div class="relative w-full h-1 bg-gray-300 rounded">
-                            <div class="absolute h-1 bg-primary rounded left-0 right-0" id="range-track"
-                                style="left: 10%; right: 30%;"></div>
+                            <div class="absolute h-1 bg-primary rounded" id="range-track"></div>
                         </div>
-                        <input type="range" min="0" max="500" value="50"
-                            class="absolute w-full h-1 bg-transparent appearance-none top-6 left-0 pointer-events-none z-20"
+                        <input type="range" name="min_price" min="0" max="500" value="{{ request('min_price', 0) }}"
+                            class="range-thumb-only absolute w-full h-1 bg-transparent appearance-none top-6 left-0 z-20"
                             id="range-min">
-                        <input type="range" min="0" max="500" value="350"
-                            class="absolute w-full h-1 bg-transparent appearance-none top-6 left-0 pointer-events-none z-20"
+                        <input type="range" name="max_price" min="0" max="500" value="{{ request('max_price', 500) }}"
+                            class="range-thumb-only absolute w-full h-1 bg-transparent appearance-none top-6 left-0 z-20"
                             id="range-max">
 
                         <div class="flex justify-between mt-4 text-sm font-medium text-gray-600">
-                            <span>$<span id="price-min-display">50</span></span>
-                            <span>$<span id="price-max-display">350</span></span>
+                            <span>$<span id="price-min-display">{{ request('min_price', 0) }}</span></span>
+                            <span>$<span id="price-max-display">{{ request('max_price', 500) }}</span></span>
                         </div>
                     </div>
                 </div>
+                </form>
 
-                <div class="bg-gray-50 p-6 rounded-lg border">
+                {{-- <div class="bg-gray-50 p-6 rounded-lg border">
                     <h4 class="font-bold text-lg mb-4">Filter By Color</h4>
                     <ul class="space-y-3">
                         <li class="flex items-center">
@@ -121,9 +150,9 @@
                             </label>
                         </li>
                     </ul>
-                </div>
+                </div> --}}
 
-                <div class="bg-gray-50 p-6 rounded-lg border">
+                {{-- <div class="bg-gray-50 p-6 rounded-lg border">
                     <h4 class="font-bold text-lg mb-4">Tags</h4>
                     <div class="flex flex-wrap gap-2">
                         <a href="#"
@@ -135,7 +164,7 @@
                         <a href="#"
                             class="px-3 py-1 bg-white border rounded text-sm hover:bg-primary hover:text-white transition">Modern</a>
                     </div>
-                </div>
+                </div> --}}
 
             </aside>
 
@@ -162,11 +191,12 @@
 
                         <div class="flex items-center">
                             <span class="mr-2 text-sm font-medium">Sort By:</span>
-                            <select class="border rounded p-1 text-sm focus:outline-none focus:border-primary">
-                                <option>Featured</option>
-                                <option>Price: Low to High</option>
-                                <option>Price: High to Low</option>
-                                <option>Newest</option>
+                            <select id="sort-select" class="border rounded p-1 text-sm focus:outline-none focus:border-primary">
+                                <option value="newest" {{ request('sort', 'newest') == 'newest' ? 'selected' : '' }}>Newest</option>
+                                <option value="oldest" {{ request('sort') == 'oldest' ? 'selected' : '' }}>Oldest</option>
+                                <option value="featured" {{ request('sort') == 'featured' ? 'selected' : '' }}>Featured</option>
+                                <option value="price_low" {{ request('sort') == 'price_low' ? 'selected' : '' }}>Price: Low to High</option>
+                                <option value="price_high" {{ request('sort') == 'price_high' ? 'selected' : '' }}>Price: High to Low</option>
                             </select>
                         </div>
                     </div>
@@ -260,4 +290,101 @@
             </div>
         </div>
     </div>
+
+    <script>
+        (function () {
+            const btnGrid = document.getElementById('btn-grid');
+            const btnList = document.getElementById('btn-list');
+            const gridView = document.getElementById('product-grid-view');
+            const listView = document.getElementById('product-list-view');
+
+            const activeClasses = ['bg-primary', 'text-white'];
+            const inactiveClasses = ['bg-gray-200'];
+
+            function showGrid() {
+                gridView.classList.remove('hidden');
+                listView.classList.add('hidden');
+
+                btnGrid.classList.add(...activeClasses);
+                btnGrid.classList.remove(...inactiveClasses);
+                btnList.classList.remove(...activeClasses);
+                btnList.classList.add(...inactiveClasses);
+
+                localStorage.setItem('shopView', 'grid');
+            }
+
+            function showList() {
+                listView.classList.remove('hidden');
+                gridView.classList.add('hidden');
+
+                btnList.classList.add(...activeClasses);
+                btnList.classList.remove(...inactiveClasses);
+                btnGrid.classList.remove(...activeClasses);
+                btnGrid.classList.add(...inactiveClasses);
+
+                localStorage.setItem('shopView', 'list');
+            }
+
+            btnGrid.addEventListener('click', showGrid);
+            btnList.addEventListener('click', showList);
+
+            let savedView = null;
+            try {
+                savedView = localStorage.getItem('shopView');
+            } catch (e) {}
+
+            if (savedView === 'list') {
+                showList();
+            }
+        })();
+
+        (function () {
+            const sortSelect = document.getElementById('sort-select');
+
+            sortSelect.addEventListener('change', function () {
+                const url = new URL(window.location.href);
+                url.searchParams.set('sort', sortSelect.value);
+                url.searchParams.delete('page');
+                window.location.href = url.toString();
+            });
+        })();
+
+        (function () {
+            const minRange = document.getElementById('range-min');
+            const maxRange = document.getElementById('range-max');
+            const track = document.getElementById('range-track');
+            const minDisplay = document.getElementById('price-min-display');
+            const maxDisplay = document.getElementById('price-max-display');
+            const form = document.getElementById('shop-filter-form');
+
+            function updateTrack() {
+                const min = parseInt(minRange.min);
+                const max = parseInt(minRange.max);
+
+                if (parseInt(minRange.value) > parseInt(maxRange.value)) {
+                    minRange.value = maxRange.value;
+                }
+
+                const minVal = parseInt(minRange.value);
+                const maxVal = parseInt(maxRange.value);
+
+                const minPercent = ((minVal - min) / (max - min)) * 100;
+                const maxPercent = ((maxVal - min) / (max - min)) * 100;
+
+                track.style.left = minPercent + '%';
+                track.style.right = (100 - maxPercent) + '%';
+
+                minDisplay.textContent = minVal;
+                maxDisplay.textContent = maxVal;
+            }
+
+            minRange.addEventListener('input', updateTrack);
+            maxRange.addEventListener('input', updateTrack);
+
+            minRange.addEventListener('change', function () { form.submit(); });
+            maxRange.addEventListener('change', function () { form.submit(); });
+
+            updateTrack();
+        })();
+    </script>
 </x-app-layout>
