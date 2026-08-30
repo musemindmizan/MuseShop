@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CheckoutController;
@@ -79,6 +80,13 @@ Route::middleware([AuthAdmin::class])->group(function() {
     Route::delete('/admin/product/delete/{id}', [ProductController::class, 'destroy'])->name('admin.product.delete');
     Route::delete('/admin/products/bulk-delete', [ProductController::class, 'bulkDestroy'])->name('admin.products.bulk-delete');
     Route::get('/admin/products/export', [ProductController::class, 'export'])->name('admin.products.export');
+
+    // Orders
+    Route::get('/admin/orders', [OrderController::class, 'index'])->name('order.index');
+    Route::get('/admin/orders/export', [OrderController::class, 'export'])->name('order.export');
+    Route::get('/admin/orders/{order}', [OrderController::class, 'show'])->name('order.show');
+    Route::post('/admin/orders/{order}/status', [OrderController::class, 'updateStatus'])->name('order.update-status');
+    Route::get('/admin/orders/{order}/invoice', [OrderController::class, 'downloadInvoice'])->name('order.invoice');
 });
 
 require __DIR__.'/auth.php';
