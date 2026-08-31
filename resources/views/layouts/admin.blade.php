@@ -112,10 +112,18 @@
                         <i class="fa-solid fa-users w-5 text-center"></i>
                         <span>Customers</span>
                     </a>
-                    <a href="reviews.php"
+                    <a href="{{ route('admin.reviews') }}"
                         class="nav-link flex items-center gap-3 px-4 py-2.5 text-gray-100 hover:text-white hover:bg-gray-800 rounded-lg transition">
                         <i class="fa-regular fa-star w-5 text-center"></i>
                         <span>Reviews</span>
+                    </a>
+                    <a href="{{ route('admin.messages') }}"
+                        class="nav-link flex items-center gap-3 px-4 py-2.5 text-gray-100 hover:text-white hover:bg-gray-800 rounded-lg transition">
+                        <i class="fa-regular fa-envelope w-5 text-center"></i>
+                        <span>Messages</span>
+                        @if ($unreadMessagesCount > 0)
+                            <span class="ml-auto bg-primary text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">{{ $unreadMessagesCount }}</span>
+                        @endif
                     </a>
                     <a href="{{ route('admin.coupons') }}"
                         class="nav-link flex items-center gap-3 px-4 py-2.5 text-gray-100 hover:text-white hover:bg-gray-800 rounded-lg transition">

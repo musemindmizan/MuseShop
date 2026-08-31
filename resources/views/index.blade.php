@@ -9,7 +9,7 @@
                             <h2 class="text-4xl lg:text-6xl font-bold text-gray-800 leading-tight">New Stylish <br />
                                 Decor Furniture</h2>
                             <p class="text-lg text-gray-600">Unique Furniture Style Design for Your Family</p>
-                            <a href="shop.php"
+                            <a href="{{ route('shop.index') }}"
                                 class="inline-block bg-primary text-white px-8 py-3 rounded hover:bg-blue-600 transition shadow-lg mt-4">Purchase
                                 Now</a>
                         </div>
@@ -24,7 +24,7 @@
                             <h2 class="text-4xl lg:text-6xl font-bold text-gray-800 leading-tight">Modern Living <br />
                                 Room Sets</h2>
                             <p class="text-lg text-gray-600">Comfort and Style combined.</p>
-                            <a href="shop.php"
+                            <a href="{{ route('shop.index') }}"
                                 class="inline-block bg-primary text-white px-8 py-3 rounded hover:bg-blue-600 transition shadow-lg mt-4">Shop
                                 Now</a>
                         </div>
@@ -171,7 +171,7 @@
                     <div class="absolute inset-0 flex flex-col justify-center items-start p-8">
                         <h6 class="text-sm font-bold uppercase text-gray-500 mb-2">High-Quality</h6>
                         <h3 class="text-2xl font-bold mb-4">New Kitchen <br> Furniture</h3>
-                        <a href="shop.php"
+                        <a href="{{ route('shop.index') }}"
                             class="bg-primary text-white px-6 py-2 rounded hover:bg-blue-700 transition">Shop Now</a>
                     </div>
                 </div>
@@ -181,7 +181,7 @@
                     <div class="absolute inset-0 flex flex-col justify-center items-start p-8">
                         <h6 class="text-sm font-bold uppercase text-gray-500 mb-2">Best-Quality</h6>
                         <h3 class="text-2xl font-bold mb-4">Bed Room <br> Furniture</h3>
-                        <a href="shop.php"
+                        <a href="{{ route('shop.index') }}"
                             class="bg-primary text-white px-6 py-2 rounded hover:bg-blue-700 transition">Shop Now</a>
                     </div>
                 </div>
@@ -218,7 +218,7 @@
                         </div>
                     </div>
 
-                    <a href="shop.php"
+                    <a href="{{ route('shop.index') }}"
                         class="inline-block bg-primary text-white px-8 py-3 rounded hover:bg-blue-600 transition shadow-lg">Shop
                         Now</a>
                 </div>

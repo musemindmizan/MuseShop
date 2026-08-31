@@ -15,12 +15,6 @@
             </li>
             <li>
                 <button class="account-tab-btn w-full text-left px-6 py-4 transition flex items-center gap-3"
-                    data-target="downloads">
-                    <i class="fa fa-cloud-download w-5 text-center"></i> Downloads
-                </button>
-            </li>
-            <li>
-                <button class="account-tab-btn w-full text-left px-6 py-4 transition flex items-center gap-3"
                     data-target="payment">
                     <i class="fa fa-credit-card w-5 text-center"></i> Payment Method
                 </button>
@@ -39,7 +33,7 @@
             </li>
             <li>
                 <a href="{{ route('logout') }}"
-                    onclick="event.preventDefault(); document.getElementById('form-logout').submit();"
+                    onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
                     class="w-full text-left px-6 py-4 transition flex items-center gap-3 hover:bg-gray-100 hover:text-red-500">
                     <i class="fa fa-sign-out w-5 text-center"></i> Logout
                 </a>

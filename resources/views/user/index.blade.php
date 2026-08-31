@@ -58,76 +58,34 @@
                                         </tr>
                                     </thead>
                                     <tbody class="divide-y">
-                                        <tr>
-                                            <td class="p-4">1</td>
-                                            <td class="p-4">Mostarizing Oil</td>
-                                            <td class="p-4">Aug 22, 2020</td>
-                                            <td class="p-4"><span
-                                                    class="bg-yellow-100 text-yellow-800 px-2 py-1 rounded text-xs">Pending</span>
-                                            </td>
-                                            <td class="p-4">$100</td>
-                                            <td class="p-4"><a href="#"
-                                                    class="bg-primary text-white px-4 py-1 rounded hover:bg-blue-600 text-sm">View</a>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td class="p-4">2</td>
-                                            <td class="p-4">Katopeno Altuni</td>
-                                            <td class="p-4">July 22, 2020</td>
-                                            <td class="p-4"><span
-                                                    class="bg-green-100 text-green-800 px-2 py-1 rounded text-xs">Approved</span>
-                                            </td>
-                                            <td class="p-4">$45</td>
-                                            <td class="p-4"><a href="#"
-                                                    class="bg-primary text-white px-4 py-1 rounded hover:bg-blue-600 text-sm">View</a>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td class="p-4">3</td>
-                                            <td class="p-4">Murikhete Paris</td>
-                                            <td class="p-4">June 22, 2020</td>
-                                            <td class="p-4"><span
-                                                    class="bg-red-100 text-red-800 px-2 py-1 rounded text-xs">On
-                                                    Hold</span></td>
-                                            <td class="p-4">$99</td>
-                                            <td class="p-4"><a href="#"
-                                                    class="bg-primary text-white px-4 py-1 rounded hover:bg-blue-600 text-sm">View</a>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div id="downloads" class="account-tab-content hidden">
-                        <div class="bg-white border rounded p-6">
-                            <h4 class="text-xl font-bold mb-6">Download</h4>
-                            <div class="overflow-x-auto">
-                                <table class="w-full text-left border-collapse">
-                                    <thead>
-                                        <tr class="bg-gray-100 border-b">
-                                            <th class="p-4 font-bold">Product</th>
-                                            <th class="p-4 font-bold">Date</th>
-                                            <th class="p-4 font-bold">Expire</th>
-                                            <th class="p-4 font-bold">Download</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody class="divide-y">
-                                        <tr>
-                                            <td class="p-4">Mostarizing Oil</td>
-                                            <td class="p-4">Aug 22, 2020</td>
-                                            <td class="p-4">Yes</td>
-                                            <td class="p-4"><a href="#"
-                                                    class="text-primary hover:underline">Download File</a></td>
-                                        </tr>
-                                        <tr>
-                                            <td class="p-4">Katopeno Altuni</td>
-                                            <td class="p-4">July 22, 2020</td>
-                                            <td class="p-4">Never</td>
-                                            <td class="p-4"><a href="#"
-                                                    class="text-primary hover:underline">Download File</a></td>
-                                        </tr>
+                                        @forelse ($orders as $order)
+                                            @php
+                                                $statusColors = [
+                                                    'pending' => 'bg-yellow-100 text-yellow-800',
+                                                    'processing' => 'bg-blue-100 text-blue-800',
+                                                    'shipped' => 'bg-indigo-100 text-indigo-800',
+                                                    'delivered' => 'bg-green-100 text-green-800',
+                                                    'cancelled' => 'bg-red-100 text-red-800',
+                                                ];
+                                            @endphp
+                                            <tr>
+                                                <td class="p-4">{{ $loop->iteration }}</td>
+                                                <td class="p-4">{{ $order->order_number }}</td>
+                                                <td class="p-4">{{ $order->created_at->format('M d, Y') }}</td>
+                                                <td class="p-4"><span
+                                                        class="{{ $statusColors[$order->status] ?? 'bg-gray-100 text-gray-800' }} px-2 py-1 rounded text-xs capitalize">{{ $order->status }}</span>
+                                                </td>
+                                                <td class="p-4">${{ number_format($order->total, 2) }}</td>
+                                                <td class="p-4"><a href="{{ route('checkout.confirmation', $order) }}"
+                                                        class="bg-primary text-white px-4 py-1 rounded hover:bg-blue-600 text-sm">View</a>
+                                                </td>
+                                            </tr>
+                                        @empty
+                                            <tr>
+                                                <td colspan="6" class="p-6 text-center text-gray-500">You haven't
+                                                    placed any orders yet.</td>
+                                            </tr>
+                                        @endforelse
                                     </tbody>
                                 </table>
                             </div>
@@ -146,79 +104,77 @@
                     <div id="address" class="account-tab-content hidden">
                         <div class="bg-white border rounded p-6">
                             <h4 class="text-xl font-bold mb-6">Address</h4>
-                            <div class="grid md:grid-cols-2 gap-8">
-                                <div class="border p-4 rounded bg-gray-50">
-                                    <h5 class="font-bold text-lg mb-2">Billing Address</h5>
-                                    <address class="not-italic text-sm text-gray-600 mb-4">
-                                        <strong class="block text-gray-800 text-base mb-1">Alex Tuntuni</strong>
-                                        1355 Market St, Suite 900<br>
-                                        San Francisco, CA 94103<br>
-                                        Mobile: (123) 456-7890
+                            @if ($lastOrder)
+                                <div class="border p-4 rounded bg-gray-50 max-w-md">
+                                    <h5 class="font-bold text-lg mb-2">Last Used Address</h5>
+                                    <address class="not-italic text-sm text-gray-600">
+                                        <strong class="block text-gray-800 text-base mb-1">{{ $lastOrder->name }}</strong>
+                                        {{ $lastOrder->address }}, {{ $lastOrder->locality }}@if ($lastOrder->landmark), {{ $lastOrder->landmark }}@endif<br>
+                                        {{ $lastOrder->city }}, {{ $lastOrder->state }} {{ $lastOrder->postal_code }}<br>
+                                        Mobile: {{ $lastOrder->phone }}
                                     </address>
-                                    <a href="#"
-                                        class="inline-block bg-primary text-white px-4 py-2 rounded hover:bg-blue-600 text-sm"><i
-                                            class="fa fa-edit"></i> Edit Address</a>
                                 </div>
-                                <div class="border p-4 rounded bg-gray-50">
-                                    <h5 class="font-bold text-lg mb-2">Shipping Address</h5>
-                                    <address class="not-italic text-sm text-gray-600 mb-4">
-                                        <strong class="block text-gray-800 text-base mb-1">Alex Tuntuni</strong>
-                                        1355 Market St, Suite 900<br>
-                                        San Francisco, CA 94103<br>
-                                        Mobile: (123) 456-7890
-                                    </address>
-                                    <a href="#"
-                                        class="inline-block bg-primary text-white px-4 py-2 rounded hover:bg-blue-600 text-sm"><i
-                                            class="fa fa-edit"></i> Edit Address</a>
-                                </div>
-                            </div>
+                                <p class="text-xs text-gray-500 mt-4">A new delivery address can be entered on the
+                                    checkout page for each order.</p>
+                            @else
+                                <p class="text-gray-500">No address on file yet — one will be saved after your first
+                                    order.</p>
+                            @endif
                         </div>
                     </div>
 
                     <div id="details" class="account-tab-content hidden">
                         <div class="bg-white border rounded p-6">
                             <h4 class="text-xl font-bold mb-6">Account Details</h4>
-                            <form action="#" class="space-y-4">
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                    <div>
-                                        <label class="block mb-1 text-sm">First Name</label>
-                                        <input type="text"
-                                            class="w-full border p-3 rounded focus:outline-none focus:border-primary">
-                                    </div>
-                                    <div>
-                                        <label class="block mb-1 text-sm">Last Name</label>
-                                        <input type="text"
-                                            class="w-full border p-3 rounded focus:outline-none focus:border-primary">
-                                    </div>
-                                </div>
+                            <form action="{{ route('profile.update') }}" method="POST" class="space-y-4">
+                                @csrf
+                                @method('PATCH')
                                 <div>
-                                    <label class="block mb-1 text-sm">Display Name</label>
-                                    <input type="text"
+                                    <label class="block mb-1 text-sm">Name</label>
+                                    <input type="text" name="name" value="{{ old('name', Auth::user()->name) }}"
                                         class="w-full border p-3 rounded focus:outline-none focus:border-primary">
+                                    @error('name')
+                                        <p class="text-sm text-red-500 mt-1">{{ $message }}</p>
+                                    @enderror
                                 </div>
                                 <div>
                                     <label class="block mb-1 text-sm">Email Address</label>
-                                    <input type="email"
+                                    <input type="email" name="email" value="{{ old('email', Auth::user()->email) }}"
                                         class="w-full border p-3 rounded focus:outline-none focus:border-primary">
+                                    @error('email')
+                                        <p class="text-sm text-red-500 mt-1">{{ $message }}</p>
+                                    @enderror
                                 </div>
 
-                                <div class="pt-4">
-                                    <h5 class="text-lg font-bold mb-3">Password Change</h5>
-                                    <div class="space-y-4">
-                                        <input type="password" placeholder="Current Password"
-                                            class="w-full border p-3 rounded focus:outline-none focus:border-primary">
-                                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                            <input type="password" placeholder="New Password"
-                                                class="w-full border p-3 rounded focus:outline-none focus:border-primary">
-                                            <input type="password" placeholder="Confirm Password"
-                                                class="w-full border p-3 rounded focus:outline-none focus:border-primary">
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <button
+                                <button type="submit"
                                     class="bg-primary text-white px-6 py-3 rounded hover:bg-blue-600 transition shadow">Save
                                     Changes</button>
+                            </form>
+
+                            <form action="{{ route('password.update') }}" method="POST" class="space-y-4 pt-8 mt-8 border-t">
+                                @csrf
+                                @method('PUT')
+                                <h5 class="text-lg font-bold mb-3">Password Change</h5>
+                                <div class="space-y-4">
+                                    <input type="password" name="current_password" placeholder="Current Password"
+                                        class="w-full border p-3 rounded focus:outline-none focus:border-primary">
+                                    @error('current_password', 'updatePassword')
+                                        <p class="text-sm text-red-500">{{ $message }}</p>
+                                    @enderror
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                        <input type="password" name="password" placeholder="New Password"
+                                            class="w-full border p-3 rounded focus:outline-none focus:border-primary">
+                                        <input type="password" name="password_confirmation" placeholder="Confirm Password"
+                                            class="w-full border p-3 rounded focus:outline-none focus:border-primary">
+                                    </div>
+                                    @error('password', 'updatePassword')
+                                        <p class="text-sm text-red-500">{{ $message }}</p>
+                                    @enderror
+                                </div>
+
+                                <button type="submit"
+                                    class="bg-primary text-white px-6 py-3 rounded hover:bg-blue-600 transition shadow">Update
+                                    Password</button>
                             </form>
                         </div>
                     </div>
@@ -227,5 +183,28 @@
             </div>
         </div>
     </section>
+
+    <script>
+        const accountTabBtns = document.querySelectorAll('.account-tab-btn');
+        const accountTabContents = document.querySelectorAll('.account-tab-content');
+
+        function showAccountTab(target) {
+            accountTabBtns.forEach(b => b.classList.toggle('active', b.dataset.target === target));
+            accountTabContents.forEach(c => c.classList.toggle('hidden', c.id !== target));
+        }
+
+        accountTabBtns.forEach(btn => {
+            btn.addEventListener('click', () => showAccountTab(btn.dataset.target));
+        });
+
+        const hashTarget = window.location.hash.replace('#', '');
+        if (hashTarget && document.getElementById(hashTarget)) {
+            showAccountTab(hashTarget);
+        }
+
+        @if ($errors->any() || $errors->updatePassword->any())
+            showAccountTab('details');
+        @endif
+    </script>
 
 </x-app-layout>

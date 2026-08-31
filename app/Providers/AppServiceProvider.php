@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Models\ContactMessage;
 use App\Services\CartService;
 use App\Services\WishlistService;
 use Illuminate\Support\Facades\View;
@@ -28,6 +29,10 @@ class AppServiceProvider extends ServiceProvider
         View::composer('*', function ($view) {
             $view->with('cartCount', app(CartService::class)->count());
             $view->with('wishlistProductIds', app(WishlistService::class)->productIds());
+        });
+
+        View::composer('layouts.admin', function ($view) {
+            $view->with('unreadMessagesCount', ContactMessage::whereNull('read_at')->count());
         });
     }
 }

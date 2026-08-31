@@ -100,7 +100,7 @@
                             <li><a href="{{route('shop.index')}}" class="hover:text-primary transition">Shop</a></li>
                             <li><a href="{{route('cart.index')}}" class="hover:text-primary transition">Cart</a></li>
                             <li><a href="{{route('wishlist.index')}}" class="hover:text-primary transition">Wishlist</a></li>
-                            <li><a href="contact.php" class="hover:text-primary transition">Contact</a></li>
+                            <li><a href="{{ route('contact.index') }}" class="hover:text-primary transition">Contact</a></li>
                         </ul>
                     </nav>
                 </div>
@@ -206,15 +206,27 @@
 
                         <ul id="avatar-submenu-mobile"
                             class="absolute right-0 mt-3 w-44 bg-white border border-gray-100 shadow-xl py-2 rounded-lg hidden z-[100]">
-                            <li><a href="my-account.php"
-                                    class="block px-4 py-2 hover:bg-gray-100 text-sm text-gray-700">My Account</a></li>
-                            <li><a href="checkout.php"
-                                    class="block px-4 py-2 hover:bg-gray-100 text-sm text-gray-700">Checkout</a></li>
-                            <li class="border-t border-gray-50 mt-1">
-                                <a href="login.php"
-                                    class="block px-4 py-2 hover:bg-gray-100 text-sm font-bold text-primary">Sign
-                                    In</a>
-                            </li>
+                            @guest
+                                <li><a href="{{ route('login') }}"
+                                        class="block px-4 py-2 hover:bg-gray-100 text-sm font-bold text-primary">Sign
+                                        In</a></li>
+                                <li><a href="{{ route('register') }}"
+                                        class="block px-4 py-2 hover:bg-gray-100 text-sm text-gray-700">Sign Up</a></li>
+                            @else
+                                <li><a href="{{ Auth::user()->role === 'admin' ? route('admin.index') : route('user.index') }}"
+                                        class="block px-4 py-2 hover:bg-gray-100 text-sm text-gray-700">My Account</a></li>
+                                <li><a href="{{ route('checkout.index') }}"
+                                        class="block px-4 py-2 hover:bg-gray-100 text-sm text-gray-700">Checkout</a></li>
+                                <li class="border-t border-gray-50 mt-1">
+                                    <a href="{{ route('logout') }}"
+                                        onclick="event.preventDefault(); document.getElementById('form-logout-mobile').submit();"
+                                        class="block px-4 py-2 hover:bg-gray-100 text-sm font-bold text-primary">Sign
+                                        Out</a>
+                                    <form action="{{ route('logout') }}" method="POST" id="form-logout-mobile" class="hidden">
+                                        @csrf
+                                    </form>
+                                </li>
+                            @endguest
                         </ul>
                     </div>
                 </div>
@@ -245,7 +257,7 @@
                 <li><a href="{{route('shop.index')}}" class="block hover:text-primary">Shop</a></li>
                 <li><a href="{{route('cart.index')}}" class="block hover:text-primary">Cart</a></li>
                 <li><a href="{{route('wishlist.index')}}" class="block hover:text-primary">Wishlist</a></li>
-                <li><a href="contact.php" class="block hover:text-primary">Contact</a></li>
+                <li><a href="{{ route('contact.index') }}" class="block hover:text-primary">Contact</a></li>
             </ul>
         </nav>
     </div>
@@ -293,20 +305,24 @@
                 <div>
                     <h4 class="text-white font-bold text-lg mb-6">Information</h4>
                     <ul class="space-y-2 text-sm">
-                        <li><a href="about.php" class="hover:text-primary transition">About Us</a></li>
+                        <li><a href="{{ route('about.index') }}" class="hover:text-primary transition">About Us</a></li>
                         <li><a href="#" class="hover:text-primary transition">How to Shop</a></li>
                         <li><a href="#" class="hover:text-primary transition">FAQ</a></li>
-                        <li><a href="contact.php" class="hover:text-primary transition">Contact Us</a></li>
+                        <li><a href="{{ route('contact.index') }}" class="hover:text-primary transition">Contact Us</a></li>
                     </ul>
                 </div>
 
                 <div>
                     <h4 class="text-white font-bold text-lg mb-6">My Account</h4>
                     <ul class="space-y-2 text-sm">
-                        <li><a href="login.php" class="hover:text-primary transition">Sign In</a></li>
+                        @guest
+                            <li><a href="{{ route('login') }}" class="hover:text-primary transition">Sign In</a></li>
+                        @else
+                            <li><a href="{{ Auth::user()->role === 'admin' ? route('admin.index') : route('user.index') }}" class="hover:text-primary transition">My Account</a></li>
+                        @endguest
                         <li><a href="{{route('cart.index')}}" class="hover:text-primary transition">View Cart</a></li>
                         <li><a href="{{route('wishlist.index')}}" class="hover:text-primary transition">My Wishlist</a></li>
-                        <li><a href="#" class="hover:text-primary transition">Track My Order</a></li>
+                        <li><a href="{{ route('user.index') }}#orders" class="hover:text-primary transition">Track My Order</a></li>
                     </ul>
                 </div>
             </div>
