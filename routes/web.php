@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\ContactMessageController;
 use App\Http\Controllers\Admin\CouponController;
 use App\Http\Controllers\Admin\CustomerController;
+use App\Http\Controllers\Admin\HeroSlideController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\ReviewController;
@@ -124,6 +125,14 @@ Route::middleware([AuthAdmin::class])->group(function() {
     Route::get('/admin/coupon/edit/{id}', [CouponController::class, 'edit'])->name('admin.coupon.edit');
     Route::post('/admin/coupon/edit/{id}', [CouponController::class, 'update'])->name('admin.coupon.update');
     Route::delete('/admin/coupon/delete/{id}', [CouponController::class, 'destroy'])->name('admin.coupon.delete');
+
+    // Hero Slides
+    Route::get('/admin/hero-slides', [HeroSlideController::class, 'index'])->name('admin.hero-slides');
+    Route::get('/admin/hero-slide/create', [HeroSlideController::class, 'create'])->name('admin.hero-slide.create');
+    Route::post('/admin/hero-slide/create', [HeroSlideController::class, 'store'])->name('admin.hero-slide.store');
+    Route::get('/admin/hero-slide/edit/{id}', [HeroSlideController::class, 'edit'])->name('admin.hero-slide.edit');
+    Route::post('/admin/hero-slide/edit/{id}', [HeroSlideController::class, 'update'])->name('admin.hero-slide.update');
+    Route::delete('/admin/hero-slide/delete/{id}', [HeroSlideController::class, 'destroy'])->name('admin.hero-slide.delete');
 
     // Settings
     Route::get('/admin/settings', [SettingController::class, 'index'])->name('admin.settings');

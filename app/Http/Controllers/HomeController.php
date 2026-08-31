@@ -5,12 +5,15 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Category;
 use App\Models\Brand;
+use App\Models\HeroSlide;
 use App\Models\Product;
 
 
 class HomeController extends Controller
 {
     public function index() {
+        $heroSlides = HeroSlide::where('status', 1)->orderBy('sort_order')->orderBy('id')->get();
+
         $categories = Category::where('status', 1)->get();
 
         $brands = Brand::where('status', 1)->get();
@@ -19,6 +22,6 @@ class HomeController extends Controller
 
         $featuredProducts = Product::where('status', 1)->where('featured', 1)->take(10)->get();
 
-        return view('index', compact('categories', 'brands', 'newProducts', 'featuredProducts'));
+        return view('index', compact('heroSlides', 'categories', 'brands', 'newProducts', 'featuredProducts'));
     }
 }
